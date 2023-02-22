@@ -1,7 +1,23 @@
 import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 const app = express();
+dotenv.config();
 
-app.listen(8800,()=>{
-    console.log("Connected!")
+const connectDB = () => {
+    mongoose.set("strictQuery", false);
+    mongoose
+        .connect(process.env.MONGO)
+        .then(() => {
+            console.log("Connected to DB")
+        })
+        .catch((err) => {
+            throw (err);
+        });
+}
+
+app.listen(8800, () => {
+    connectDB();
+    console.log("Connected to Server!")
 })
