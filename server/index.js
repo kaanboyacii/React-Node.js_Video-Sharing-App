@@ -28,6 +28,16 @@ app.use("/api/users",UserRoutes);
 app.use("/api/videos",VideoRoutes);
 app.use("/api/comments",CommentRoutes);
 
+app.use((err, req, res, next)=>{
+    const status = err.status || 500;
+    const message = err.message || "Something went wrong !";
+    return res.status(status).json({
+        success:false,
+        status:status,
+        message:message,
+    });
+});
+
 app.listen(8800, () => {
     connectDB();
     console.log("Connected to Server!")
