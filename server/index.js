@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import UserRoutes from "./routes/users.js"
 import VideoRoutes from "./routes/videos.js"
 import CommentRoutes from "./routes/comments.js"
+import AuthRoutes from "./routes/auth.js"
 
 const app = express();
 dotenv.config();
@@ -20,6 +21,9 @@ const connectDB = () => {
         });
 }
 
+app.use(express.json());
+
+app.use("/api/auth",AuthRoutes);
 app.use("/api/users",UserRoutes);
 app.use("/api/videos",VideoRoutes);
 app.use("/api/comments",CommentRoutes);
