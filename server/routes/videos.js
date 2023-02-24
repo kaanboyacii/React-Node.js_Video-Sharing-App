@@ -11,8 +11,8 @@ router.get("/find/:id",getVideo)
 
 router.put("/view/:id",getVideo)
 router.get("/trend",trend)
-router.put("/random",random)
-router.put("/sub",sub)
+router.get("/random",random)
+router.get("/sub", verifyToken,sub)
 
 
 export default router;

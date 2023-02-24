@@ -3,7 +3,7 @@ import User from "../models/User.js"
 import Video from "../models/Video.js";
 
 export const addVideo = async (req, res, next) => {
-    const newVideo = new Video({ userId: req.user.id, ...reqçbody });
+    const newVideo = new Video({ userId: req.user.id, ...req.body });
     try {
         const savedVideo = await newVideo.save();
         res.status(200).json(savedVideo)
@@ -100,10 +100,17 @@ export const trend = async (req, res, next) => {
 
 export const sub = async (req, res, next) => {
     try {
-        const video = await Video.findById(req.params.id);
-        res.status(200).json(video);
+        const user = await User.findById(req.user.id);
+        const subscribedChannels = user.subscribedUsers;
+
+        const list = await Promise.all(
+            subscribedChannels.map(async (channelId) => {
+                return await Video.find({ userId: channelId });
+            })
+        );
+
+        res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
     } catch (err) {
-        next(err)
+        next(err);
     }
 };
-
