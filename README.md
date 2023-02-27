@@ -11,4 +11,6 @@
 
 2-Install npm
 
-3-Run "npm start" command via terminal inside files a and b
+3-Run "npm start" command via terminal inside files server and client
+
+4-Project run at http://localhost:3000/
