@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import LamaTube from "../img/logo.png";
+import UyuTube from "../img/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 
 const Container = styled.div`
   flex: 1;
+  flex-direction: column;
   background-color: ${({ theme }) => theme.bgLighter};
   height: 100vh;
   color: ${({ theme }) => theme.text};
@@ -37,6 +38,7 @@ const Logo = styled.div`
   align-items: center;
   gap: 5px;
   font-weight: bold;
+  font-size: 20px;
   margin-bottom: 25px;
 `;
 
@@ -52,6 +54,7 @@ const Item = styled.div`
   padding: 7.5px 0px;
 
   &:hover {
+    border-radius: 10px;
     background-color: ${({ theme }) => theme.soft};
   }
 `;
@@ -91,8 +94,8 @@ const Menu = ({ darkMode, setDarkMode }) => {
       <Wrapper>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
-            <Img src={LamaTube} />
-            UyuTube
+            <Img src={UyuTube} />
+             UyuTube
           </Logo>
         </Link>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -101,13 +104,13 @@ const Menu = ({ darkMode, setDarkMode }) => {
             Home
           </Item>
         </Link>
-        <Link to="trends" style={{ textDecoration: "none" }}>
+        <Link to="trends" style={{ textDecoration: "none", color: "inherit" }}>
           <Item>
             <ExploreOutlinedIcon />
             Explore
           </Item>
         </Link>
-        <Link to="subscriptions" style={{ textDecoration: "none" }}>
+        <Link to="subscriptions" style={{ textDecoration: "none",color: "inherit" }}>
           <Item>
             <SubscriptionsOutlinedIcon />
             Subscriptions
@@ -149,18 +152,6 @@ const Menu = ({ darkMode, setDarkMode }) => {
         <Item>
           <SportsEsportsOutlinedIcon />
           Gaming
-        </Item>
-        <Item>
-          <MovieOutlinedIcon />
-          Movies
-        </Item>
-        <Item>
-          <ArticleOutlinedIcon />
-          News
-        </Item>
-        <Item>
-          <LiveTvOutlinedIcon />
-          Live
         </Item>
         <Hr />
         <Item>

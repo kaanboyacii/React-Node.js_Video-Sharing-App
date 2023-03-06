@@ -5,12 +5,14 @@ import axios from "axios";
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between;
+  gap: 10px;
+  /* justify-content: space-between; */
   flex-wrap: wrap;
 `;
 
 const Home = ({type}) => {
   const [videos, setVideos] = useState([]);
+
   useEffect(() => {
     const fetchVideos = async () => {
       const res = await axios.get(`/videos/${type}`);

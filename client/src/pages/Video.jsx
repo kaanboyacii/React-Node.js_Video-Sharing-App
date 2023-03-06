@@ -120,7 +120,6 @@ const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   const [channel, setChannel] = useState({});
-  console.log(currentVideo.title);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
 
@@ -154,6 +153,7 @@ const Video = () => {
       : await axios.put(`/users/sub/${channel._id}`);
     dispatch(subscription(channel._id));
   };
+
 
   return (
     <Container>
