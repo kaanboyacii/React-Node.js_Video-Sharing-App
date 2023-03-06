@@ -1,5 +1,5 @@
 import express from "express";
-import { googleAuth, signin, signup } from "../controllers/auth.js";
+import { googleAuth, logout, signin, signup } from "../controllers/auth.js";
 
 const router = express.Router();
 
@@ -8,6 +8,9 @@ router.post("/signup",signup)
 
 //Sign in
 router.post("/signin",signin)
+
+//Sign in
+router.post("/logout",logout)
 
 //Google auth
 router.post("/google", googleAuth)
