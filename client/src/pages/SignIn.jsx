@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { loginFailure, loginStart, loginSuccess } from "../redux/userSlice.js";
+import { loginFailure, loginStart, loginSuccess, register, registerFailure, registerSuccess } from "../redux/userSlice.js";
 import { auth, provider } from "../firebase.js";
 import { signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
@@ -88,6 +88,18 @@ const SignIn = () => {
     }
   };
 
+  const handleRegister = async (e) =>{
+    e.preventDefault();
+    dispatch(register());
+    try {
+      const res = await axios.post("/auth/signup", {name,email,password});
+      dispatch(registerSuccess(res.data));
+      navigate("/")
+    } catch (err) {
+      dispatch(registerFailure());
+    }
+  };
+
   const signInWithGoogle = async () => {
     dispatch(loginStart());
     signInWithPopup(auth, provider)
@@ -118,11 +130,12 @@ const SignIn = () => {
         <Input type="password" placeholder="password"  onChange={e=>setPassword(e.target.value)} />
         <Button onClick={handleLogin}>Sign in</Button>
         <Title>or</Title>
+        <Title>Sign Up</Title>
         <Button onClick={signInWithGoogle}>Signin with Google</Button>
         <Input placeholder="username"  onChange={e=>setName(e.target.value)}/>
         <Input placeholder="email"  onChange={e=>setEmail(e.target.value)}/>
         <Input type="password" placeholder="password"  onChange={e=>setPassword(e.target.value)} />
-        <Button>Sign up</Button>
+        <Button onClick={handleRegister}>Sign up</Button>
       </Wrapper>
       <More>
         English(USA)
