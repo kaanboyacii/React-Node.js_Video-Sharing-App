@@ -27,7 +27,7 @@ const Content = styled.div`
 const VideoWrapper = styled.div``;
 
 const Title = styled.h1`
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 400;
   margin-top: 20px;
   margin-bottom: 10px;
@@ -38,6 +38,20 @@ const Details = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+`;
+
+const Desc = styled.div`
+  display: flex;
+  margin-top: 20px;
+  color: ${({ theme }) => theme.text};
+  background-color: #2f3440;
+  border-radius: 20px;
+`;
+
+const DescText = styled.div`
+  padding: 10px;
+  display: flex;
+  color: ${({ theme }) => theme.text};
 `;
 
 const Info = styled.span`
@@ -153,14 +167,13 @@ const Video = () => {
       : await axios.put(`/users/sub/${channel._id}`);
     dispatch(subscription(channel._id));
   };
-  const formatView = n => {
+  const formatView = (n) => {
     if (n < 1e3) return n;
     if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
     if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
     if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + "B";
     if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
   };
-
 
   return (
     <Container>
@@ -198,6 +211,9 @@ const Video = () => {
             </Button>
           </Buttons>
         </Details>
+        <Desc>
+          <DescText>{currentVideo.desc}</DescText>
+        </Desc>
         <Hr />
         <Channel>
           <ChannelInfo>
@@ -215,7 +231,7 @@ const Video = () => {
           </Subscribe>
         </Channel>
         <Hr />
-        <Comments videoId={currentVideo._id}/>
+        <Comments videoId={currentVideo._id} />
       </Content>
       <Recommendation tags={currentVideo.tags} />
     </Container>

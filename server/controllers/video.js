@@ -99,15 +99,25 @@ export const trend = async (req, res, next) => {
 
 export const sub = async (req, res, next) => {
     try {
-        const user = await User.findById(req.user.id);
-        const subscribedChannels = user.subscribedUsers;
+        // const user = await User.findById(req.user.id);
+        // const subscribedChannels = user.subscribedUsers;
 
+        // const list = await Promise.all(
+        //     subscribedChannels.map(async (channelId) => {
+        //         return await Video.find({ userId: channelId });
+        //     })
+        // );
+        // res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
+        const user = await User.findById(req.user.id);
+        const followedUsers = user.subscribedUsers;
+        console.log(followedUsers)
+
+        // Find posts from the followed users and sort them by date
         const list = await Promise.all(
-            subscribedChannels.map(async (channelId) => {
+            followedUsers.map(async (channelId) => {
                 return await Video.find({ userId: channelId });
             })
         );
-
         res.status(200).json(list.flat().sort((a, b) => b.createdAt - a.createdAt));
     } catch (err) {
         next(err);
