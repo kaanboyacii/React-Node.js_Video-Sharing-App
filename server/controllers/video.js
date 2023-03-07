@@ -74,7 +74,6 @@ export const addView = async (req, res, next) => {
             $inc: { views: 1 },
         });
         res.status(200).json("The view has been increased.");
-        console.log("okey")
     } catch (err) {
         next(err);
     }
