@@ -41,7 +41,6 @@ export const signin = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   try {
-    console.log("oldu")
     // Get the JWT from the request header
     const token = req.headers.authorization.split(' ')[1];
 

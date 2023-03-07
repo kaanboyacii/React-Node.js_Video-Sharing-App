@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import UyuTube from "../img/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
@@ -17,7 +17,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const Container = styled.div`
@@ -88,6 +88,7 @@ const Title = styled.h2`
 
 const Menu = ({ darkMode, setDarkMode }) => {
   const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
 
   return (
     <Container>
@@ -95,7 +96,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
           <Logo>
             <Img src={UyuTube} />
-             UyuTube
+            UyuTube
           </Logo>
         </Link>
         <Link to="/" style={{ textDecoration: "none", color: "inherit" }}>
@@ -110,7 +111,10 @@ const Menu = ({ darkMode, setDarkMode }) => {
             Explore
           </Item>
         </Link>
-        <Link to="subscriptions" style={{ textDecoration: "none",color: "inherit" }}>
+        <Link
+          to="subscriptions"
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
           <Item>
             <SubscriptionsOutlinedIcon />
             Subscriptions
@@ -141,17 +145,25 @@ const Menu = ({ darkMode, setDarkMode }) => {
           </>
         )}
         <Title>BEST OF UyuTube</Title>
-        <Item>
+        <Item onClick={() => navigate(`/specificTags?q=music`)}>
           <LibraryMusicOutlinedIcon />
           Music
         </Item>
-        <Item>
+        <Item onClick={() => navigate(`/specificTags?q=sport`)}>
           <SportsBasketballOutlinedIcon />
           Sports
         </Item>
-        <Item>
+        <Item onClick={() => navigate(`/specificTags?q=gaming`)}>
           <SportsEsportsOutlinedIcon />
           Gaming
+        </Item>
+        <Item onClick={() => navigate(`/specificTags?q=movies`)}>
+          <MovieOutlinedIcon />
+          Movies
+        </Item>
+        <Item onClick={() => navigate(`/specificTags?q=news`)}>
+          <ArticleOutlinedIcon />
+          News
         </Item>
         <Hr />
         <Item>

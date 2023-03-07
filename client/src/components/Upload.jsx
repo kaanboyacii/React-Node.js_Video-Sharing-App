@@ -169,6 +169,7 @@ const Upload = ({ setOpen }) => {
           rows={8}
           onChange={handleChange}
         />
+        <p>Main Categories: music,sport,gaming,movies,news</p>
         <Input
           type="text"
           placeholder="Separate the tags with commas."
