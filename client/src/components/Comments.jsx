@@ -1,3 +1,4 @@
+import { Button } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
@@ -33,6 +34,7 @@ const Comments = ({videoId}) => {
   const { currentUser } = useSelector((state) => state.user);
 
   const [comments, setComments] = useState([]);
+  const [commentText, setCommentText] = useState('');
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -44,13 +46,25 @@ const Comments = ({videoId}) => {
     fetchComments();
   }, [videoId]);
 
+  const handleComment = async () => {
+    try {
+      const res = await axios.post('/comments/', { desc: commentText ,videoId: videoId});
+      console.log(res.data);
+      window.location.reload();
+      // Update the list of comments in your React state
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   //TODO: ADD NEW COMMENT FUNCTIONALITY
 
   return (
     <Container>
       <NewComment>
         <Avatar src={currentUser.img} />
-        <Input placeholder="Add a comment..." />
+        <Input type="text" value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder="Add a comment..." />
+        <Button onClick={handleComment}>Add Comment</Button>
       </NewComment>
       {comments.map(comment=>(
         <Comment key={comment._id} comment={comment}/>

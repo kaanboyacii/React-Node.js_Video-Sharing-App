@@ -153,6 +153,13 @@ const Video = () => {
       : await axios.put(`/users/sub/${channel._id}`);
     dispatch(subscription(channel._id));
   };
+  const formatView = n => {
+    if (n < 1e3) return n;
+    if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
+    if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
+    if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + "B";
+    if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
+  };
 
 
   return (
@@ -164,7 +171,7 @@ const Video = () => {
         <Title>{currentVideo.title}</Title>
         <Details>
           <Info>
-            {currentVideo.views} • {format(currentVideo.createdAt)}
+            {formatView(currentVideo.views)} • {format(currentVideo.createdAt)}
           </Info>
           <Buttons>
             <Button onClick={handleLike}>

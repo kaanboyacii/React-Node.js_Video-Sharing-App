@@ -86,6 +86,7 @@ const Navbar = () => {
     e.preventDefault();
     dispatch(logout());
     const res = await axios.post("/auth/logout");
+    navigate("/") 
   };
 
   return (
