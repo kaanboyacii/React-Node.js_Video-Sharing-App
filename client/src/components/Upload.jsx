@@ -23,8 +23,8 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 600px;
-  height: 600px;
+  width: 650px;
+  height: 650px;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
   padding: 20px;
@@ -169,7 +169,7 @@ const Upload = ({ setOpen }) => {
           rows={8}
           onChange={handleChange}
         />
-        <p>Main Categories: music,sport,gaming,movies,news</p>
+        <p style={{fontSize:"12px"}}>Main Categories: music,sport,gaming,movies,news</p>
         <Input
           type="text"
           placeholder="Separate the tags with commas."
