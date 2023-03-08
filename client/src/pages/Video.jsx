@@ -10,11 +10,12 @@ import Comments from "../components/Comments";
 import Card from "../components/Card";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { dislike, fetchSuccess, like } from "../redux/videoSlice.js";
 import { subscription } from "../redux/userSlice";
 import { format } from "timeago.js";
 import Recommendation from "../components/Recommendation";
+import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
 
 const Container = styled.div`
   display: flex;
@@ -130,12 +131,27 @@ const VideoFrame = styled.video`
   object-fit: cover;
 `;
 
+const alertButton = styled.video`
+  padding: 5px 15px;
+  background-color: transparent;
+  border: 1px solid #3ea6ff;
+  color: #3ea6ff;
+  border-radius: 3px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+`;
+
+
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   const [channel, setChannel] = useState({});
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -203,6 +219,15 @@ const Video = () => {
               )}{" "}
               Dislike
             </Button>
+
+            {!currentUser && (
+              <div>
+                <Button style={{color:"red"}} onClick={() => navigate("/signin")}>
+                  <AccountCircleOutlined />
+                  You must login to interact
+                </Button>
+              </div>
+            )}
             <Button>
               <ReplyOutlinedIcon /> Share
             </Button>
@@ -224,8 +249,8 @@ const Video = () => {
               <Description>{currentVideo.escription}</Description>
             </ChannelDetail>
           </ChannelInfo>
-          <Subscribe onClick={handleSub}>
-            {currentUser.subscribedUsers?.includes(channel._id)
+          <Subscribe onClick={handleSub} disabled={!currentUser}>
+            {currentUser?.subscribedUsers?.includes(channel._id)
               ? "SUBSCRIBED"
               : "SUBSCRIBE"}
           </Subscribe>

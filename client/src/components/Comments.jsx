@@ -1,7 +1,9 @@
+import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
 import { Button } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Comment from "./Comment";
 
@@ -29,12 +31,11 @@ const Input = styled.input`
   width: 100%;
 `;
 
-const Comments = ({videoId}) => {
-
+const Comments = ({ videoId }) => {
   const { currentUser } = useSelector((state) => state.user);
-
+  const navigate = useNavigate();
   const [comments, setComments] = useState([]);
-  const [commentText, setCommentText] = useState('');
+  const [commentText, setCommentText] = useState("");
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -48,7 +49,10 @@ const Comments = ({videoId}) => {
 
   const handleComment = async () => {
     try {
-      const res = await axios.post('/comments/', { desc: commentText ,videoId: videoId});
+      const res = await axios.post("/comments/", {
+        desc: commentText,
+        videoId: videoId,
+      });
       console.log(res.data);
       window.location.reload();
       // Update the list of comments in your React state
@@ -61,13 +65,25 @@ const Comments = ({videoId}) => {
 
   return (
     <Container>
-      <NewComment>
-        <Avatar src={currentUser.img} />
-        <Input type="text" value={commentText} onChange={(e) => setCommentText(e.target.value)} placeholder="Add a comment..." />
-        <Button onClick={handleComment}>Add Comment</Button>
-      </NewComment>
-      {comments.map(comment=>(
-        <Comment key={comment._id} comment={comment}/>
+      {currentUser ? (
+        <NewComment>
+          <Avatar src={currentUser.img} />
+          <Input
+            type="text"
+            value={commentText}
+            onChange={(e) => setCommentText(e.target.value)}
+            placeholder="Add a comment..."
+          />
+          <Button onClick={handleComment}>Add Comment</Button>
+        </NewComment>
+      ) : (
+        <Button style={{color:"red"}} onClick={() => navigate("/signin")}>
+        <AccountCircleOutlined />
+        You must login to comment
+      </Button>
+      )}
+      {comments.map((comment) => (
+        <Comment key={comment._id} comment={comment} />
       ))}
     </Container>
   );
