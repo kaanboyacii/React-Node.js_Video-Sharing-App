@@ -145,23 +145,23 @@ const Menu = ({ darkMode, setDarkMode }) => {
           </>
         )}
         <Title>BEST OF UyuTube</Title>
-        <Item onClick={() => navigate(`/specificTags?q=music`)}>
+        <Item onClick={() => navigate(`/search?q=music`)}>
           <LibraryMusicOutlinedIcon />
           Music
         </Item>
-        <Item onClick={() => navigate(`/specificTags?q=sport`)}>
+        <Item onClick={() => navigate(`/search?q=sport`)}>
           <SportsBasketballOutlinedIcon />
           Sports
         </Item>
-        <Item onClick={() => navigate(`/specificTags?q=gaming`)}>
+        <Item onClick={() => navigate(`/search?q=gaming`)}>
           <SportsEsportsOutlinedIcon />
           Gaming
         </Item>
-        <Item onClick={() => navigate(`/specificTags?q=movies`)}>
+        <Item onClick={() => navigate(`/search?q=movies`)}>
           <MovieOutlinedIcon />
           Movies
         </Item>
-        <Item onClick={() => navigate(`/specificTags?q=news`)}>
+        <Item onClick={() => navigate(`/search?q=news`)}>
           <ArticleOutlinedIcon />
           News
         </Item>

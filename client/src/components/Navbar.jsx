@@ -97,8 +97,13 @@ const Navbar = () => {
             <Input
               placeholder="Search"
               onChange={(e) => setQ(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter') {
+                  navigate(`/search?q=${q}`);
+                }
+              }}
             />
-            <SearchOutlinedIcon onClick={() => navigate(`/search?q=${q}`)} />
+            <SearchOutlinedIcon style={{color:"red"}} onClick={() => navigate(`/search?q=${q}`)} />
           </Search>
           {currentUser ? (
             <User>
