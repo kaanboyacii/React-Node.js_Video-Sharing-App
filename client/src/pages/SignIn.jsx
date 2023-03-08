@@ -73,6 +73,8 @@ const SignIn = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage1, setErrorMessage1] = useState("");
+  const [errorMessage2, setErrorMessage2] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -85,18 +87,7 @@ const SignIn = () => {
       navigate("/")
     } catch (err) {
       dispatch(loginFailure());
-    }
-  };
-
-  const handleRegister = async (e) =>{
-    e.preventDefault();
-    dispatch(register());
-    try {
-      const res = await axios.post("/auth/signup", {name,email,password});
-      dispatch(registerSuccess(res.data));
-      navigate("/")
-    } catch (err) {
-      dispatch(registerFailure());
+      setErrorMessage1("Invalid user information");
     }
   };
 
@@ -118,7 +109,22 @@ const SignIn = () => {
       })
       .catch((error) => {
         dispatch(loginFailure());
+        setErrorMessage1("Invalid user information");
       });
+  };
+
+
+  const handleRegister = async (e) =>{
+    e.preventDefault();
+    dispatch(register());
+    try {
+      const res = await axios.post("/auth/signup", {name,email,password});
+      dispatch(registerSuccess(res.data));
+      navigate("/")
+    } catch (err) {
+      dispatch(registerFailure());
+      setErrorMessage2("Invalid user registration");
+    }
   };
 
   return (
@@ -129,6 +135,7 @@ const SignIn = () => {
         <Input placeholder="username" onChange={e=>setName(e.target.value)} />
         <Input type="password" placeholder="password"  onChange={e=>setPassword(e.target.value)} />
         <Button onClick={handleLogin}>Sign in</Button>
+        {errorMessage1 && <div>{errorMessage1}</div>} {/* burada hata mesajı varsa div içinde gösteriyoruz */}
         <Title>or</Title>
         <Title>Sign Up</Title>
         <Button onClick={signInWithGoogle}>Signin with Google</Button>
@@ -136,6 +143,7 @@ const SignIn = () => {
         <Input placeholder="email"  onChange={e=>setEmail(e.target.value)}/>
         <Input type="password" placeholder="password"  onChange={e=>setPassword(e.target.value)} />
         <Button onClick={handleRegister}>Sign up</Button>
+        {errorMessage2 && <div>{errorMessage2}</div>} {/* burada hata mesajı varsa div içinde gösteriyoruz */}
       </Wrapper>
       <More>
         English(USA)
