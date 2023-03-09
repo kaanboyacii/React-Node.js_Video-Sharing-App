@@ -48,16 +48,19 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
+  font-size: 20px;
+  margin-bottom: 5px;
   padding: 5px 15px;
   background-color: transparent;
-  border: 1px solid #3ea6ff;
-  color: #3ea6ff;
-  border-radius: 3px;
+  border: 1px solid #ff2b2b;
+  color: #ff2b2b;
+  border-radius: 5px;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 5px;
+  width: 170px;
 `;
 
 const User = styled.div`
@@ -74,6 +77,22 @@ const Avatar = styled.img`
   border-radius: 50%;
   background-color: #999;
 `;
+const UserAvatar = styled.div`
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #999;
+  cursor: pointer;
+`;
+const UserMenu = styled.div`
+  position: absolute;
+  top: 56px;
+  right: 20px;
+  background-color: ${({ theme }) => theme.bgLighter};
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+`;
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -81,12 +100,17 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
   const { currentUser } = useSelector((state) => state.user);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleUserClick = () => {
+    setMenuOpen(!menuOpen);
+  };
 
   const handleLogout = async (e) => {
     e.preventDefault();
     dispatch(logout());
     const res = await axios.post("/auth/logout");
-    navigate("/") 
+    navigate("/");
   };
 
   return (
@@ -98,22 +122,35 @@ const Navbar = () => {
               placeholder="Search"
               onChange={(e) => setQ(e.target.value)}
               onKeyPress={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === "Enter") {
                   navigate(`/search?q=${q}`);
                 }
               }}
             />
-            <SearchOutlinedIcon style={{color:"red"}} onClick={() => navigate(`/search?q=${q}`)} />
+            <SearchOutlinedIcon
+              style={{ color: "red" }}
+              onClick={() => navigate(`/search?q=${q}`)}
+            />
           </Search>
           {currentUser ? (
             <User>
-              <VideoCallOutlinedIcon onClick={() => setOpen(true)} />
-              <Avatar src={currentUser.img} />
+              <VideoCallOutlinedIcon
+                style={{ cursor: "pointer", fontSize: "35px" }}
+                onClick={() => setOpen(true)}
+              />
+              <UserAvatar onClick={handleUserClick}>
+                <Avatar src={currentUser.img} />
+              </UserAvatar>
               {currentUser.name}
-              <Button onClick={handleLogout}>
-                <AccountCircleOutlinedIcon />
-                Logout
-              </Button>
+              {menuOpen && (
+                <UserMenu>
+                  <Button>User Panel</Button>
+                  <Button>Your Channel</Button>
+                  <Button>Help</Button>
+                  <Button>Settings</Button>
+                  <Button onClick={handleLogout}>Logout</Button>
+                </UserMenu>
+              )}
             </User>
           ) : (
             <Link to="signin" style={{ textDecoration: "none" }}>
