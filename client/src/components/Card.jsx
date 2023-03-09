@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { format } from "timeago.js";
 
@@ -57,6 +57,7 @@ const Info = styled.div`
 const Card = ({ type, video }) => {
   const [channel, setChannel] = useState({});
   const [views, setViews] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchChannel = async () => {
@@ -70,13 +71,13 @@ const Card = ({ type, video }) => {
     try {
       const response = await axios.put(`/videos/view/${video._id}`);
       setViews(response.data.views);
-      console.log("izlenme arttırıldı")
+      console.log("izlenme arttırıldı");
     } catch (err) {
       console.error(err);
     }
   };
 
-  const formatView = n => {
+  const formatView = (n) => {
     if (n < 1e3) return n;
     if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
     if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
@@ -85,25 +86,29 @@ const Card = ({ type, video }) => {
   };
 
   return (
-    <Link onClick={handleView} to={`/video/${video._id}`} style={{ textDecoration: "none" }}>
-      <Container type={type}>
-        <Image
-          type={type}
-          src={video.imgUrl}
-        />
+    <Container type={type}>
+        <Link
+          onClick={handleView}
+          to={`/video/${video._id}`}
+          style={{ textDecoration: "none" }}
+        >
+        <Image type={type} src={video.imgUrl} />
+          </Link>
         <Details type={type}>
           <ChannelImage
+            onClick={() => navigate(`/users/find/${channel._id}`)}
             type={type}
             src={channel.img}
           />
           <Texts>
-            <Title>{video.title}</Title>
-            <ChannelName>{channel.name}</ChannelName>
-            <Info>{formatView(video.views)} views • {format(video.createdAt)}</Info>
+            <Title  onClick={() => navigate(`/video/${video._id}`)}>{video.title}</Title>
+            <ChannelName  onClick={() => navigate(`/users/find/${channel._id}`)}>{channel.name}</ChannelName>
+            <Info>
+              {formatView(video.views)} views • {format(video.createdAt)}
+            </Info>
           </Texts>
         </Details>
       </Container>
-    </Link>
   );
 };
 
