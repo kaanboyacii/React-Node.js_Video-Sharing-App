@@ -67,6 +67,17 @@ export const getVideo = async (req, res, next) => {
     }
 };
 
+export const getVideosByUserId = async (req, res, next) => {
+    try {
+      const userId = req.params.userId;
+      const videos = await Video.find({ userId });
+      res.status(200).json(videos);
+    } catch (err) {
+      next(err);
+    }
+  };
+  
+
 
 export const addView = async (req, res, next) => {
     try {
