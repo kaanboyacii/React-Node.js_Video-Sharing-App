@@ -96,7 +96,7 @@ const Card = ({ type, video }) => {
           </Link>
         <Details type={type}>
           <ChannelImage
-            onClick={() => navigate(`/users/find/${channel._id}`)}
+            onClick={() => navigate(`/users/find/${channel._id}`, { state: { userId: channel._id } })}
             type={type}
             src={channel.img}
           />
