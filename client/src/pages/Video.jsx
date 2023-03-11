@@ -192,13 +192,7 @@ const Video = () => {
     if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
   };
 
-  useEffect(() => {
-    const fetchChannel = async () => {
-      const res = await axios.get(`/users/find/${currentVideo.userId}`);
-      setChannel(res.data);
-    };
-    fetchChannel();
-  }, [currentVideo.userId]);
+
 
   return (
     <Container>

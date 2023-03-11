@@ -145,7 +145,15 @@ const Navbar = () => {
               {menuOpen && (
                 <UserMenu>
                   <Button>User Panel</Button>
-                  <Button>Your Channel</Button>
+                  <Button
+                    onClick={() =>
+                      navigate(`/users/find/${currentUser._id}`, {
+                        state: { userId: currentUser._id },
+                      })
+                    }
+                  >
+                    Your Channel
+                  </Button>
                   <Button>Help</Button>
                   <Button>Settings</Button>
                   <Button onClick={handleLogout}>Logout</Button>
