@@ -88,6 +88,7 @@ const ChannelInfo = styled.div`
 `;
 
 const Image = styled.img`
+  cursor: pointer;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -100,6 +101,7 @@ const ChannelDetail = styled.div`
 `;
 
 const ChannelName = styled.span`
+  cursor: pointer;
   font-weight: 500;
 `;
 
@@ -143,7 +145,6 @@ const alertButton = styled.video`
   align-items: center;
   gap: 5px;
 `;
-
 
 const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -191,6 +192,14 @@ const Video = () => {
     if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
   };
 
+  useEffect(() => {
+    const fetchChannel = async () => {
+      const res = await axios.get(`/users/find/${currentVideo.userId}`);
+      setChannel(res.data);
+    };
+    fetchChannel();
+  }, [currentVideo.userId]);
+
   return (
     <Container>
       <Content>
@@ -222,7 +231,10 @@ const Video = () => {
 
             {!currentUser && (
               <div>
-                <Button style={{color:"red"}} onClick={() => navigate("/signin")}>
+                <Button
+                  style={{ color: "red" }}
+                  onClick={() => navigate("/signin")}
+                >
                   <AccountCircleOutlined />
                   You must login to interact
                 </Button>
@@ -242,9 +254,24 @@ const Video = () => {
         <Hr />
         <Channel>
           <ChannelInfo>
-            <Image src={channel.img} />
+            <Image
+              onClick={() =>
+                navigate(`/users/find/${channel._id}`, {
+                  state: { userId: channel._id },
+                })
+              }
+              src={channel.img}
+            />
             <ChannelDetail>
-              <ChannelName>{channel.name}</ChannelName>
+              <ChannelName
+                onClick={() =>
+                  navigate(`/users/find/${channel._id}`, {
+                    state: { userId: channel._id },
+                  })
+                }
+              >
+                {channel.name}
+              </ChannelName>
               <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
               <Description>{currentVideo.escription}</Description>
             </ChannelDetail>
