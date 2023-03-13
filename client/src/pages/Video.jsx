@@ -133,13 +133,15 @@ const VideoFrame = styled.video`
   object-fit: cover;
 `;
 
-const alertButton = styled.video`
-  padding: 5px 15px;
+const EditButton = styled.button`
+  padding: 5px 10px;
+  font-size: 20px;
   background-color: transparent;
-  border: 1px solid #3ea6ff;
-  color: #3ea6ff;
-  border-radius: 3px;
-  font-weight: 500;
+  border: 1px solid #cc1a00;
+  color: #cc1a00;
+  border-radius: 5px;
+  font-weight: 600;
+  margin-top: 10px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -192,8 +194,6 @@ const Video = () => {
     if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
   };
 
-
-
   return (
     <Container>
       <Content>
@@ -201,11 +201,17 @@ const Video = () => {
           <VideoFrame src={currentVideo.videoUrl} controls />
         </VideoWrapper>
         <Title>{currentVideo.title}</Title>
+        
         <Details>
           <Info>
             {formatView(currentVideo.views)} • {format(currentVideo.createdAt)}
           </Info>
           <Buttons>
+        {currentVideo.userId === currentUser._id ? (
+          <>
+            <EditButton>Edit Video</EditButton>
+          </>
+        ) : null}
             <Button onClick={handleLike}>
               {currentVideo.likes?.includes(currentUser?._id) ? (
                 <ThumbUpIcon />
