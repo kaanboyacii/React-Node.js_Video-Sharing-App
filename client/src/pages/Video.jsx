@@ -16,6 +16,7 @@ import { subscription } from "../redux/userSlice";
 import { format } from "timeago.js";
 import Recommendation from "../components/Recommendation";
 import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
+import UpdateVideo from "../components/UpdateVideo";
 
 const Container = styled.div`
   display: flex;
@@ -152,6 +153,7 @@ const Video = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   const [channel, setChannel] = useState({});
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
   const navigate = useNavigate();
@@ -209,7 +211,7 @@ const Video = () => {
           <Buttons>
         {currentVideo.userId === currentUser._id ? (
           <>
-            <EditButton>Edit Video</EditButton>
+            <EditButton onClick={() => setOpen(true)}>Edit Video</EditButton>
           </>
         ) : null}
             <Button onClick={handleLike}>
@@ -286,6 +288,7 @@ const Video = () => {
         <Comments videoId={currentVideo._id} />
       </Content>
       <Recommendation tags={currentVideo.tags} />
+      {open && <UpdateVideo setOpen={setOpen} />}
     </Container>
   );
 };
