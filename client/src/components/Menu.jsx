@@ -121,7 +121,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
           </Item>
         </Link>
         <Hr />
-        <Item>
+        <Item onClick={() => navigate(`/users/library/${currentUser._id}`)}>
           <VideoLibraryOutlinedIcon />
           Library
         </Item>

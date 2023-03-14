@@ -10,6 +10,7 @@ import SignIn from "./pages/SignIn";
 import Search from "./pages/Search";
 import Category from "./pages/Category";
 import Channel from "./pages/Channel";
+import Library from "./pages/Library";
 
 const Container = styled.div`
   display: flex;
@@ -42,6 +43,9 @@ function App() {
                   <Route index element={<Home type="random" />} />
                   <Route path="trends" element={<Home type="trend" />} />
                   <Route path="subscriptions" element={<Home type="sub" />} />
+                  <Route path="users/library">
+                    <Route path=":id" element={<Library />} />
+                  </Route>
                   <Route path="specificTags" element={<Category type="specificTags" />} />
                   <Route path="search" element={<Search/>} />
                   <Route path="signin" element={<SignIn />} />

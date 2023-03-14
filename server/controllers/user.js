@@ -62,22 +62,22 @@ export const subscribe = async (req, res, next) => {
 
 export const unsubscribe = async (req, res, next) => {
     try {
-      try {
-        await User.findByIdAndUpdate(req.user.id, {
-          $pull: { subscribedUsers: req.params.id },
-        });
-        await User.findByIdAndUpdate(req.params.id, {
-          $inc: { subscribers: -1 },
-        });
-        res.status(200).json("Unsubscription successfull.")
-      } catch (err) {
-        next(err);
-      }
+        try {
+            await User.findByIdAndUpdate(req.user.id, {
+                $pull: { subscribedUsers: req.params.id },
+            });
+            await User.findByIdAndUpdate(req.params.id, {
+                $inc: { subscribers: -1 },
+            });
+            res.status(200).json("Unsubscription successfull.")
+        } catch (err) {
+            next(err);
+        }
     } catch (err) {
-      next(err);
+        next(err);
     }
-  };
-  
+};
+
 export const like = async (req, res, next) => {
     const id = req.user.id;
     const videoId = req.params.videoId;
@@ -132,10 +132,11 @@ export const removeToLibrary = async (req, res, next) => {
 
 export const library = async (req, res, next) => {
     try {
-      const { userId } = req.params; // request parametresinden userId'yi alıyoruz
-      const user = await User.findById(userId).select('library');
-      res.status(200).json(user.library);
+        const { id } = req.params;
+        const user = await User.findById(id).select('library');
+        const videos = await Video.find({ _id: { $in: user.library.map(video => video) } });
+        res.status(200).json(videos);
     } catch (err) {
-      next(err);
+        next(err);
     }
-  };
+};

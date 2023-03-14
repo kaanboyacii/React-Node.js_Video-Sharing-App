@@ -197,11 +197,15 @@ const Video = () => {
 
   const [isSaved, setIsSaved] = useState(false);
   useEffect(() => {
-    setIsSaved(currentUser.library?.includes(currentVideo?._id) || false);
+    setIsSaved(currentUser && currentUser.library?.includes(currentVideo?._id) || false);
   }, [currentUser.library, currentVideo]);
 
   const handleSave = async () => {
     try {
+      if (!currentUser) {
+        // Eğer currentUser null ise hata fırlat
+        console.log("currentUser is null");
+      }
       if (isSaved) {
         // If video is already in library, remove it
         const response = await axios.delete(
@@ -299,15 +303,6 @@ const Video = () => {
                 </>
               )}
             </Button>
-
-            {/* <Button onClick={handleSave} style={{color:"red"}}>
-              {currentUser.library?.includes(currentVideo?._id) ? (
-                <AddTaskOutlinedIcon style={{ color: "red" }} />
-              ) : (
-                <AddTaskOutlinedIcon />
-              )}{" "}
-              Save
-            </Button> */}
           </Buttons>
         </Details>
         <Desc>

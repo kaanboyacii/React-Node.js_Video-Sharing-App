@@ -38,10 +38,11 @@ router.put("/dislike/:videoId", verifyToken, dislike);
 
 //add to library a video
 router.put("/library/:id/:videoId", verifyToken, addToLibrary);
+
 //remove to library a video
 router.delete("/library/:id/:videoId", verifyToken, removeToLibrary);
 
 //library videos
-router.put("/library/:id/", verifyToken, library);
+router.get("/library/:id", verifyToken, library);
 
 export default router;
