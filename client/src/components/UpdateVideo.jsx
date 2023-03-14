@@ -85,7 +85,7 @@ const UpdateVideo = ({ setOpen }) => {
     setInputs((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
-  };
+  };  
 
   const handleTags = (e) => {
     setTags(e.target.value.split(","));
@@ -146,26 +146,23 @@ const UpdateVideo = ({ setOpen }) => {
         <Title>Update Video</Title>
         <Input
           type="text"
-          placeholder="Title"
           name="title"
+          placeholder={currentVideo.title}
           onChange={handleChange}
-          value={currentVideo.title}
         />
         <Desc
-          placeholder="Description"
           name="desc"
           rows={8}
           onChange={handleChange}
-          value={currentVideo.desc}
+          placeholder={currentVideo.desc}
         />
         <p style={{ fontSize: "12px" }}>
           Main Categories: music,sport,gaming,movies,news
         </p>
         <Input
           type="text"
-          placeholder="Separate the tags with commas."
           onChange={handleTags}
-          value={currentVideo.tags}
+          placeholder={currentVideo.tags}
         />
         <Label>Image:</Label>
         {imgPerc > 0 ? (
