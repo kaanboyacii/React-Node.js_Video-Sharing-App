@@ -9,6 +9,7 @@ import {
 import app from "../firebase";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Container = styled.div`
   width: 100%;
@@ -23,8 +24,8 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 650px;
-  height: 650px;
+  width: 570px;
+  height: 570px;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
   padding: 20px;
@@ -71,13 +72,13 @@ const Label = styled.label`
   font-size: 14px;
 `;
 const UpdateVideo = ({ setOpen }) => {
+  const { currentVideo } = useSelector((state) => state.video);
   const [img, setImg] = useState(undefined);
   const [video, setVideo] = useState(undefined);
   const [imgPerc, setImgPerc] = useState(0);
   const [videoPerc, setVideoPerc] = useState(0);
   const [inputs, setInputs] = useState({});
   const [tags, setTags] = useState([]);
-
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -103,7 +104,7 @@ const UpdateVideo = ({ setOpen }) => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         urlType === "imgUrl"
           ? setImgPerc(Math.round(progress))
-          : setVideoPerc(Math.round(progress));
+          : alert("Sadece fotoğraf değiştirebilirsiniz !");
         switch (snapshot.state) {
           case "paused":
             console.log("Upload is paused");
@@ -127,53 +128,44 @@ const UpdateVideo = ({ setOpen }) => {
   };
 
   useEffect(() => {
-    video && uploadFile(video, "videoUrl");
-  }, [video]);
-
-  useEffect(() => {
     img && uploadFile(img, "imgUrl");
   }, [img]);
 
-  const handleUpload = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    
-    const res = await axios.post("/videos", { ...inputs, tags });
+    const res = await axios.put(`/videos/${currentVideo._id}`, { ...inputs, tags });
     setOpen(false);
     res.status === 200 && navigate(`/video/${res.data._id}`);
+    window.location.reload();
   };
 
   return (
     <Container>
       <Wrapper>
         <Close onClick={() => setOpen(false)}>X</Close>
-        <Title>Upload a New Video</Title>
-        <Label>Video:</Label>
-        {videoPerc > 0 ? (
-          "Uploading:" + videoPerc
-        ) : (
-          <Input
-            type="file"
-            accept="video/*"
-            onChange={(e) => setVideo(e.target.files[0])}
-          />
-        )}
+        <Title>Update Video</Title>
         <Input
           type="text"
           placeholder="Title"
           name="title"
           onChange={handleChange}
+          value={currentVideo.title}
         />
         <Desc
           placeholder="Description"
           name="desc"
           rows={8}
           onChange={handleChange}
+          value={currentVideo.desc}
         />
-        <p style={{fontSize:"12px"}}>Main Categories: music,sport,gaming,movies,news</p>
+        <p style={{ fontSize: "12px" }}>
+          Main Categories: music,sport,gaming,movies,news
+        </p>
         <Input
           type="text"
           placeholder="Separate the tags with commas."
           onChange={handleTags}
+          value={currentVideo.tags}
         />
         <Label>Image:</Label>
         {imgPerc > 0 ? (
@@ -185,7 +177,7 @@ const UpdateVideo = ({ setOpen }) => {
             onChange={(e) => setImg(e.target.files[0])}
           />
         )}
-        <Button onClick={handleUpload}>Upload</Button>
+        <Button onClick={handleUpdate}>Update</Button>
       </Wrapper>
     </Container>
   );

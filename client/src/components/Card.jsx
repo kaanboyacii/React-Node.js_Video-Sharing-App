@@ -15,6 +15,7 @@ const Container = styled.div`
 const Image = styled.img`
   border-radius: 10px;
   width: 100%;
+  width: ${(props) => (props.type === "sm" ? "220px" : "100%")};
   height: ${(props) => (props.type === "sm" ? "120px" : "202px")};
   background-color: #999;
   flex: 1;
@@ -71,7 +72,6 @@ const Card = ({ type, video }) => {
     try {
       const response = await axios.put(`/videos/view/${video._id}`);
       setViews(response.data.views);
-      console.log("izlenme arttırıldı");
     } catch (err) {
       console.error(err);
     }

@@ -168,7 +168,9 @@ const Video = () => {
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
         console.log(videoRes.data);
-      } catch (err) {}
+      } catch (err) {
+        console.log("User AUTH Error")
+      }
     };
     fetchData();
   }, [path, dispatch]);
@@ -203,17 +205,20 @@ const Video = () => {
           <VideoFrame src={currentVideo.videoUrl} controls />
         </VideoWrapper>
         <Title>{currentVideo.title}</Title>
-        
+
         <Details>
           <Info>
             {formatView(currentVideo.views)} • {format(currentVideo.createdAt)}
           </Info>
           <Buttons>
-        {currentVideo.userId === currentUser._id ? (
-          <>
-            <EditButton onClick={() => setOpen(true)}>Edit Video</EditButton>
-          </>
-        ) : null}
+            {currentUser && currentVideo.userId === currentUser._id ? (
+              <>
+                <EditButton onClick={() => setOpen(true)}>
+                  Edit Video
+                </EditButton>
+              </>
+            ) : null}
+
             <Button onClick={handleLike}>
               {currentVideo.likes?.includes(currentUser?._id) ? (
                 <ThumbUpIcon />
@@ -230,7 +235,6 @@ const Video = () => {
               )}{" "}
               Dislike
             </Button>
-
             {!currentUser && (
               <div>
                 <Button
