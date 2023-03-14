@@ -12,11 +12,16 @@ import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { dislike, fetchSuccess, like } from "../redux/videoSlice.js";
-import { subscription } from "../redux/userSlice";
+import {
+  subscription,
+  librarySuccess,
+  libraryFailure,
+} from "../redux/userSlice";
 import { format } from "timeago.js";
 import Recommendation from "../components/Recommendation";
 import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
 import UpdateVideo from "../components/UpdateVideo";
+import AddTaskOutlined from "@mui/icons-material/AddTaskOutlined";
 
 const Container = styled.div`
   display: flex;
@@ -167,9 +172,8 @@ const Video = () => {
         );
         setChannel(channelRes.data);
         dispatch(fetchSuccess(videoRes.data));
-        console.log(videoRes.data);
       } catch (err) {
-        console.log("User AUTH Error")
+        console.log("User AUTH Error");
       }
     };
     fetchData();
@@ -190,12 +194,46 @@ const Video = () => {
       : await axios.put(`/users/sub/${channel._id}`);
     dispatch(subscription(channel._id));
   };
+
+  const [isSaved, setIsSaved] = useState(false);
+  useEffect(() => {
+    setIsSaved(currentUser.library?.includes(currentVideo?._id) || false);
+  }, [currentUser.library, currentVideo]);
+
+  const handleSave = async () => {
+    try {
+      if (isSaved) {
+        // If video is already in library, remove it
+        const response = await axios.delete(
+          `/users/library/${currentUser._id}/${currentVideo._id}/`
+        );
+        dispatch(librarySuccess(response.data.library));
+        setIsSaved(false);
+        console.log("This video has been removed from library");
+      } else {
+        // If video is not in library, add it
+        const response = await axios.put(
+          `/users/library/${currentUser._id}/${currentVideo._id}/`
+        );
+        dispatch(librarySuccess(response.data.library));
+        setIsSaved(true);
+        console.log("This video has been added to library");
+      }
+    } catch (error) {
+      dispatch(libraryFailure(error.message));
+    }
+  };
+
   const formatView = (n) => {
     if (n < 1e3) return n;
     if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(1) + "K";
     if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(1) + "M";
     if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(1) + "B";
     if (n >= 1e12) return +(n / 1e12).toFixed(1) + "T";
+  };
+
+  const buttonStyle = {
+    color: isSaved ? "red" : "white",
   };
 
   return (
@@ -218,7 +256,6 @@ const Video = () => {
                 </EditButton>
               </>
             ) : null}
-
             <Button onClick={handleLike}>
               {currentVideo.likes?.includes(currentUser?._id) ? (
                 <ThumbUpIcon />
@@ -249,9 +286,28 @@ const Video = () => {
             <Button>
               <ReplyOutlinedIcon /> Share
             </Button>
-            <Button>
-              <AddTaskOutlinedIcon /> Save
+            <Button onClick={handleSave}>
+              {isSaved ? (
+                <>
+                  <AddTaskOutlinedIcon style={{ color: "red" }} />
+                  Remove
+                </>
+              ) : (
+                <>
+                  <AddTaskOutlinedIcon />
+                  Save
+                </>
+              )}
             </Button>
+
+            {/* <Button onClick={handleSave} style={{color:"red"}}>
+              {currentUser.library?.includes(currentVideo?._id) ? (
+                <AddTaskOutlinedIcon style={{ color: "red" }} />
+              ) : (
+                <AddTaskOutlinedIcon />
+              )}{" "}
+              Save
+            </Button> */}
           </Buttons>
         </Details>
         <Desc>

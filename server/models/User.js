@@ -27,6 +27,7 @@ const UserSchema = new mongoose.Schema({
     library: {
         type: [String],
         default: [],
+        unique: true
     },
     fromGoogle: {
         type: Boolean,

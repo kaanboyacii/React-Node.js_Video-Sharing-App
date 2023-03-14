@@ -9,6 +9,7 @@ import {
     dislike,
     library,
     addToLibrary,
+    removeToLibrary,
 } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js";
 
@@ -37,6 +38,8 @@ router.put("/dislike/:videoId", verifyToken, dislike);
 
 //add to library a video
 router.put("/library/:id/:videoId", verifyToken, addToLibrary);
+//remove to library a video
+router.delete("/library/:id/:videoId", verifyToken, removeToLibrary);
 
 //library videos
 router.put("/library/:id/", verifyToken, library);

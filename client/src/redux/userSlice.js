@@ -51,10 +51,19 @@ export const userSlice = createSlice({
           state.currentUser.subscribedUsers.push(action.payload);
         }
       },
+      librarySuccess: (state, action) => {
+        state.library = action.payload;
+        state.isLoading = false;
+        state.error = null;
+      },
+      libraryFailure: (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      },
     },
   });
   
-  export const { loginStart, loginSuccess, loginFailure, logout, subscription, register,registerFailure,registerSuccess } =
+  export const { loginStart, loginSuccess, loginFailure, logout, subscription, register,registerFailure,registerSuccess,libraryFailure,librarySuccess } =
     userSlice.actions;
   
   export default userSlice.reducer;
