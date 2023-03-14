@@ -7,6 +7,8 @@ import {
     unsubscribe,
     like,
     dislike,
+    library,
+    addToLibrary,
 } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js";
 
@@ -32,5 +34,11 @@ router.put("/like/:videoId", verifyToken, like);
 
 //dislike a video
 router.put("/dislike/:videoId", verifyToken, dislike);
+
+//add to library a video
+router.put("/library/:id/:videoId", verifyToken, addToLibrary);
+
+//library videos
+router.put("/library/:id/", verifyToken, library);
 
 export default router;

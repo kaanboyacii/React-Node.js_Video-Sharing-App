@@ -105,3 +105,24 @@ export const dislike = async (req, res, next) => {
         next(err);
     }
 };
+
+export const addToLibrary = async (req, res, next) => {
+    const videoId = req.params.videoId;
+    try {
+        await User.findByIdAndUpdate(req.user.id, {
+            $push: { library: videoId },
+        });
+        res.status(200).json("The video has been added library.")
+    } catch (err) {
+        next(err);
+    }
+};
+export const library = async (req, res, next) => {
+    try {
+      const { userId } = req.params; // request parametresinden userId'yi alıyoruz
+      const user = await User.findById(userId).select('library');
+      res.status(200).json(user.library);
+    } catch (err) {
+      next(err);
+    }
+  };
