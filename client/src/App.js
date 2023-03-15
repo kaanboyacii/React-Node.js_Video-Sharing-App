@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import Category from "./pages/Category";
 import Channel from "./pages/Channel";
 import Library from "./pages/Library";
+import Panel from "./pages/Panel";
 
 const Container = styled.div`
   display: flex;
@@ -54,6 +55,9 @@ function App() {
                   </Route>
                   <Route path="users/find">
                     <Route path=":id" element={<Channel />} />
+                  </Route>
+                  <Route path="users/panel">
+                    <Route path=":id" element={<Panel />} />
                   </Route>
                 </Route>
               </Routes>

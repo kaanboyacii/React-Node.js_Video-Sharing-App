@@ -144,7 +144,15 @@ const Navbar = () => {
               {currentUser.name}
               {menuOpen && (
                 <UserMenu>
-                  <Button>User Panel</Button>
+                  <Button
+                    onClick={() =>
+                      navigate(`/users/panel/${currentUser._id}`, {
+                        state: { userId: currentUser._id },
+                      })
+                    }
+                  >
+                    User Panel
+                  </Button>
                   <Button
                     onClick={() =>
                       navigate(`/users/find/${currentUser._id}`, {
