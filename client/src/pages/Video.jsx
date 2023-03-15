@@ -197,8 +197,13 @@ const Video = () => {
 
   const [isSaved, setIsSaved] = useState(false);
   useEffect(() => {
-    setIsSaved(currentUser && currentUser.library?.includes(currentVideo?._id) || false);
-  }, [currentUser.library, currentVideo]);
+    if (currentUser) {
+      setIsSaved(currentUser.library?.includes(currentVideo?._id) || false);
+    } else {
+      setIsSaved(false);
+    }
+  }, [currentUser, currentVideo]);
+  
 
   const handleSave = async () => {
     try {
