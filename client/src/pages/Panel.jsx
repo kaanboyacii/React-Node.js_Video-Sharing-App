@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 
 const Container = styled.div`
   display: flex;
@@ -47,15 +49,33 @@ const Photo = styled.img`
 const Panel = ({ user }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState("profile");
+  const [subscribedUser, setSubscribedUsers] = useState("profile");
+  const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
+  useEffect(() => {
+    const fetchSubscribedUsers = async () => {
+      try {
+        const subscribedUserIds = currentUser.subscribedUsers;
+        const usersRes = await Promise.all(
+          subscribedUserIds.map((userId) => axios.get(`/users/find/${userId}`))
+        );
+        const subscribedUsers = usersRes.map((res) => res.data);
+        setSubscribedUsers(subscribedUsers);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSubscribedUsers();
+  }, [currentUser]);
+
   return (
     <Container>
-      <Avatar src={currentUser.avatar} alt={`${currentUser.name}'s avatar`} />
-      <h2>{currentUser.name}</h2>
+      <Avatar src={currentUser.img} alt={`${currentUser.name}'s avatar`} />
+      <h2 style={{ fontSize: "40px" }}>{currentUser.name}</h2>
       <Tabs>
         <Tab
           active={activeTab === "profile"}
@@ -64,23 +84,16 @@ const Panel = ({ user }) => {
           Profile
         </Tab>
         <Tab
-          active={activeTab === "friends"}
-          onClick={() => handleTabClick("friends")}
+          active={activeTab === "following"}
+          onClick={() => handleTabClick("following")}
         >
-          Friends
-        </Tab>
-        <Tab
-          active={activeTab === "photos"}
-          onClick={() => handleTabClick("photos")}
-        >
-          Photos
+          Following
         </Tab>
       </Tabs>
       {activeTab === "profile" && (
         <div>
           <h3>About Me</h3>
           <p>{currentUser.about}</p>
-          <h3>Interests</h3>
           <ul>
             {currentUser.library.map((library, index) => (
               <li key={index}>{library}</li>
@@ -88,25 +101,23 @@ const Panel = ({ user }) => {
           </ul>
         </div>
       )}
-      {activeTab === "friends" && (
+      {activeTab === "following" && (
         <div>
-          <h3>Friends</h3>
-          {currentUser.friends.map((friend) => (
-            <div key={friend.id}>
-              <Avatar src={friend.avatar} alt={`${friend.name}'s avatar`} />
-              <p>{friend.name}</p>
-            </div>
-          ))}
-        </div>
-      )}
-      {activeTab === "photos" && (
-        <div>
-          <h3>Photos</h3>
-          <Gallery>
-            {currentUser.photos.map((photo, index) => (
-              <Photo key={index} src={photo} alt={`${user.name}'s photo`} />
+          <ul style={{ fontSize: "20px" }}>
+            {subscribedUser.map((user) => (
+              <li
+                style={{ cursor: "pointer", marginBottom: "10px" }}
+                key={user.id}
+                onClick={() =>
+                  navigate(`/users/find/${user._id}`, {
+                    state: { userId: user._id },
+                  })
+                }
+              >
+                {user.name} ({user.subscribers} subscribers)
+              </li>
             ))}
-          </Gallery>
+          </ul>
         </div>
       )}
     </Container>
