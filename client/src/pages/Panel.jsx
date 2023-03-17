@@ -30,7 +30,7 @@ const Tab = styled.div`
   margin: 0 10px;
   padding: 10px;
   cursor: pointer;
-  border-bottom: ${(props) => (props.active ? "2px solid blue" : "none")};
+  border-bottom: ${(props) => (props.active ? "2px solid red" : "none")};
 `;
 
 const Gallery = styled.div`
@@ -46,11 +46,62 @@ const Photo = styled.img`
   border-radius: 5px;
 `;
 
+const Title = styled.h1`
+  text-align: center;
+`;
+
+const Input = styled.input`
+  border: 1px solid ${({ theme }) => theme.soft};
+  color: ${({ theme }) => theme.text};
+  border-radius: 3px;
+  padding: 10px;
+  background-color: transparent;
+  z-index: 999;
+`;
+
+const Button = styled.button`
+  border-radius: 3px;
+  border: none;
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  background-color: ${({ theme }) => theme.soft};
+  color: ${({ theme }) => theme.textSoft};
+`;
+
+const Label = styled.label`
+  font-size: 14px;
+`;
+
 const Panel = ({ user }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState("profile");
   const [subscribedUser, setSubscribedUsers] = useState("profile");
+  const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
+  const [updatedUser, setUpdatedUser] = useState({
+    name: currentUser.name,
+    about: currentUser.about,
+    library: currentUser.library.join(","),
+  });
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setUpdatedUser({ ...updatedUser, [name]: value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await axios.put(
+        `/users/${currentUser._id}`,
+        updatedUser
+      );
+      // Update the currentUser in the store or context
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -93,7 +144,38 @@ const Panel = ({ user }) => {
       {activeTab === "profile" && (
         <div>
           <h3>About Me</h3>
-          <p>{currentUser.about}</p>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Name:
+              <input
+                type="text"
+                name="name"
+                value={updatedUser.name}
+                onChange={handleInputChange}
+              />
+            </label>
+            <br />
+            <label>
+              About:
+              <textarea
+                name="about"
+                value={updatedUser.about}
+                onChange={handleInputChange}
+              />
+            </label>
+            <br />
+            <label>
+              Library:
+              <input
+                type="text"
+                name="library"
+                value={updatedUser.library}
+                onChange={handleInputChange}
+              />
+            </label>
+            <br />
+            <button type="submit">Update Profile</button>
+          </form>
           <ul>
             {currentUser.library.map((library, index) => (
               <li key={index}>{library}</li>

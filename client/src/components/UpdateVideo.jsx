@@ -71,6 +71,7 @@ const Button = styled.button`
 const Label = styled.label`
   font-size: 14px;
 `;
+
 const UpdateVideo = ({ setOpen }) => {
   const { currentVideo } = useSelector((state) => state.video);
   const [img, setImg] = useState(undefined);
