@@ -48,18 +48,31 @@ const Photo = styled.img`
 
 const Title = styled.h1`
   text-align: center;
+  color: ${({ theme }) => theme.text};
 `;
 
 const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
   color: ${({ theme }) => theme.text};
+  background-color: ${({ theme }) => theme.soft};
   border-radius: 3px;
   padding: 10px;
   background-color: transparent;
   z-index: 999;
+  width: 100%;
+  height: 40px;
+  font-size: 16px;
+  margin: 10px 0;
+  box-shadow: 0 0 5px ${({ theme }) => theme.soft};
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
 `;
 
 const Button = styled.button`
+  margin-top: 20px;
   border-radius: 3px;
   border: none;
   padding: 10px 20px;
@@ -67,10 +80,12 @@ const Button = styled.button`
   cursor: pointer;
   background-color: ${({ theme }) => theme.soft};
   color: ${({ theme }) => theme.textSoft};
+  width: 40%;
 `;
 
 const Label = styled.label`
   font-size: 14px;
+  color: ${({ theme }) => theme.text};
 `;
 
 const Panel = ({ user }) => {
@@ -123,10 +138,23 @@ const Panel = ({ user }) => {
     fetchSubscribedUsers();
   }, [currentUser]);
 
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const res = await axios.put(`/users/${currentUser._id}`, { ...inputs });
+    res.status === 200 && navigate(`/users/panel/${res.data._id}`);
+    window.location.reload();
+  };
+
+  const handleChange = (e) => {
+    setInputs((prev) => {
+      return { ...prev, [e.target.name]: e.target.value };
+    });
+  };
+
   return (
     <Container>
       <Avatar src={currentUser.img} alt={`${currentUser.name}'s avatar`} />
-      <h2 style={{ fontSize: "40px" }}>{currentUser.name}</h2>
+      <Title style={{ fontSize: "40px" }}>{currentUser.name}</Title>
       <Tabs>
         <Tab
           active={activeTab === "profile"}
@@ -143,44 +171,29 @@ const Panel = ({ user }) => {
       </Tabs>
       {activeTab === "profile" && (
         <div>
-          <h3>About Me</h3>
-          <form onSubmit={handleSubmit}>
-            <label>
-              Name:
-              <input
-                type="text"
-                name="name"
-                value={updatedUser.name}
-                onChange={handleInputChange}
-              />
-            </label>
-            <br />
-            <label>
-              About:
-              <textarea
-                name="about"
-                value={updatedUser.about}
-                onChange={handleInputChange}
-              />
-            </label>
-            <br />
-            <label>
-              Library:
-              <input
-                type="text"
-                name="library"
-                value={updatedUser.library}
-                onChange={handleInputChange}
-              />
-            </label>
-            <br />
-            <button type="submit">Update Profile</button>
-          </form>
-          <ul>
-            {currentUser.library.map((library, index) => (
-              <li key={index}>{library}</li>
-            ))}
-          </ul>
+          <Title>Update Profile</Title>
+          <Label>Name:</Label>
+          <Input
+            type="text"
+            name="title"
+            placeholder={currentUser.name}
+            onChange={handleChange}
+          />
+          <Label>E-mail:</Label>
+          <Input
+            type="text"
+            onChange={handleChange}
+            placeholder={currentUser.tags}
+          />
+          <Label>Password:</Label>
+          <Input
+            type="text"
+            onChange={handleChange}
+            placeholder={currentUser.tags}
+          />
+          <ButtonContainer>
+            <Button onClick={handleUpdate}>Update</Button>
+          </ButtonContainer>
         </div>
       )}
       {activeTab === "following" && (
