@@ -91,7 +91,7 @@ const Label = styled.label`
 const Panel = ({ user }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState("profile");
-  const [subscribedUser, setSubscribedUsers] = useState("profile");
+  const [subscribedUsers, setSubscribedUsers] = useState([]);
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
   const [updatedUser, setUpdatedUser] = useState({
@@ -112,7 +112,6 @@ const Panel = ({ user }) => {
         `/users/${currentUser._id}`,
         updatedUser
       );
-      // Update the currentUser in the store or context
     } catch (err) {
       console.error(err);
     }
@@ -122,21 +121,21 @@ const Panel = ({ user }) => {
     setActiveTab(tab);
   };
 
-  useEffect(() => {
-    const fetchSubscribedUsers = async () => {
-      try {
-        const subscribedUserIds = currentUser.subscribedUsers;
-        const usersRes = await Promise.all(
-          subscribedUserIds.map((userId) => axios.get(`/users/find/${userId}`))
-        );
-        const subscribedUsers = usersRes.map((res) => res.data);
-        setSubscribedUsers(subscribedUsers);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchSubscribedUsers();
-  }, [currentUser]);
+  // useEffect(() => {
+  //   const fetchSubscribedUsers = async () => {
+  //     try {
+  //       const subscribedUserIds = currentUser.subscribedUsers;
+  //       const usersRes = await Promise.all(
+  //         subscribedUserIds.map((userId) => axios.get(`/users/find/${userId}`))
+  //       );
+  //       const subscribedUsers = usersRes.map((res) => res.data);
+  //       setSubscribedUsers(subscribedUsers);
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+  //   fetchSubscribedUsers();
+  // }, [currentUser]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -183,7 +182,7 @@ const Panel = ({ user }) => {
           <Input
             type="text"
             onChange={handleChange}
-            placeholder={currentUser.tags}
+            placeholder={currentUser.email}
           />
           <Label>Password:</Label>
           <Input
@@ -198,21 +197,22 @@ const Panel = ({ user }) => {
       )}
       {activeTab === "following" && (
         <div>
-          <ul style={{ fontSize: "20px" }}>
-            {subscribedUser.map((user) => (
+          {/* <ul style={{ fontSize: "20px" }}>
+            {subscribedUsers.map((user) => (
               <li
-                style={{ cursor: "pointer", marginBottom: "10px" }}
-                key={user.id}
-                onClick={() =>
-                  navigate(`/users/find/${user._id}`, {
-                    state: { userId: user._id },
-                  })
-                }
+              style={{ cursor: "pointer", marginBottom: "10px" }}
+              key={user._id}
+              onClick={() =>
+                navigate(`/users/find/${user._id}`, {
+                  state: { userId: user._id },
+                })
+              }
               >
                 {user.name} ({user.subscribers} subscribers)
               </li>
             ))}
-          </ul>
+            console.log(subscribedUsers)
+          </ul> */}
         </div>
       )}
     </Container>

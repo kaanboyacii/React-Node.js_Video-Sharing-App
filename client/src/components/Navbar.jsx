@@ -111,6 +111,7 @@ const Navbar = () => {
     dispatch(logout());
     const res = await axios.post("/auth/logout");
     navigate("/");
+    window.location.reload();
   };
 
   return (
