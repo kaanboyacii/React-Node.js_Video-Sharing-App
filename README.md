@@ -21,7 +21,7 @@ Installation
 
     Navigate to the cloned directory: cd project-name
 
-    Navigate to the API folder: cd api
+    Navigate to the API folder: cd server
 
     Run npm install command to install the API packages.
 
