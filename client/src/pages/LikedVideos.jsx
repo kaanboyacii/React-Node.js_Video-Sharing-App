@@ -18,10 +18,17 @@ const Library = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       if (currentUser && currentUser._id) {
-        // check that currentUser and currentUser._id exist
+        // Check that currentUser and currentUser._id exist
         try {
-          const res = await axios.get(`/users/library/${currentUser._id}`);
-          setVideos(res.data);
+          // Fetch all videos
+          const response = await axios.get("/videos");
+          const allVideos = response.data;
+          // Filter videos based on user likes
+          const likedVideos = allVideos.filter((video) =>
+            video.likes.includes(currentUser._id)
+          );
+          // Set filtered videos in state
+          setVideos(likedVideos);
         } catch (err) {
           console.error(err);
         }

@@ -58,6 +58,16 @@ export const deleteVideo = async (req, res, next) => {
     }
 };
 
+export const getAllVideo = async (req, res, next) => {
+    try {
+        const videos = await Video.find({});
+        res.status(200).json(videos);
+    } catch (err) {
+        next(err);
+    }
+};
+
+
 export const getVideo = async (req, res, next) => {
     try {
         const video = await Video.findById(req.params.id);
@@ -69,14 +79,14 @@ export const getVideo = async (req, res, next) => {
 
 export const getVideosByUserId = async (req, res, next) => {
     try {
-      const userId = req.params.userId;
-      const videos = await Video.find({ userId });
-      res.status(200).json(videos);
+        const userId = req.params.userId;
+        const videos = await Video.find({ userId });
+        res.status(200).json(videos);
     } catch (err) {
-      next(err);
+        next(err);
     }
-  };
-  
+};
+
 export const addView = async (req, res, next) => {
     try {
         await Video.findByIdAndUpdate(req.params.id, {

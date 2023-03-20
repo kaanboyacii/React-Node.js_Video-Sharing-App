@@ -1,9 +1,10 @@
 import express from "express";
-import { addVideo, addView, deleteVideo, getBySpecificTags, getByTags, getVideo,getVideosByUserId, random, search, sub, trend, updateVideo } from "../controllers/video.js";
+import { addVideo, addView, deleteVideo, getAllVideo, getBySpecificTags, getByTags, getVideo,getVideosByUserId, random, search, sub, trend, updateVideo } from "../controllers/video.js";
 import { verifyToken } from "../verifyToken.js";
 
 const router = express.Router();
 
+router.get("/",verifyToken,getAllVideo)
 router.post("/",verifyToken,addVideo)
 router.put("/:id",verifyToken,updateVideo)
 router.delete("/:id",verifyToken,deleteVideo)
