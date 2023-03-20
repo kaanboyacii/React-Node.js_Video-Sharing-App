@@ -94,60 +94,21 @@ const Panel = ({ user }) => {
   const [subscribedUsers, setSubscribedUsers] = useState([]);
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
-  const [updatedUser, setUpdatedUser] = useState({
-    name: currentUser.name,
-    about: currentUser.about,
-    library: currentUser.library.join(","),
-  });
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setUpdatedUser({ ...updatedUser, [name]: value });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await axios.put(
-        `/users/${currentUser._id}`,
-        updatedUser
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-  };
-
-  // useEffect(() => {
-  //   const fetchSubscribedUsers = async () => {
-  //     try {
-  //       const subscribedUserIds = currentUser.subscribedUsers;
-  //       const usersRes = await Promise.all(
-  //         subscribedUserIds.map((userId) => axios.get(`/users/find/${userId}`))
-  //       );
-  //       const subscribedUsers = usersRes.map((res) => res.data);
-  //       setSubscribedUsers(subscribedUsers);
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-  //   fetchSubscribedUsers();
-  // }, [currentUser]);
-
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    const res = await axios.put(`/users/${currentUser._id}`, { ...inputs });
-    res.status === 200 && navigate(`/users/panel/${res.data._id}`);
-    window.location.reload();
   };
 
   const handleChange = (e) => {
     setInputs((prev) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
+  };
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+    const res = await axios.put(`/users/${currentUser._id}`, { ...inputs });
+    res.status === 200 && navigate(`/users/panel/${res.data._id}`);
+    window.location.reload();
   };
 
   return (
@@ -174,18 +135,20 @@ const Panel = ({ user }) => {
           <Label>Name:</Label>
           <Input
             type="text"
-            name="title"
+            name="name"
             placeholder={currentUser.name}
             onChange={handleChange}
           />
           <Label>E-mail:</Label>
           <Input
             type="text"
+            name="email"
             onChange={handleChange}
             placeholder={currentUser.email}
           />
           <Label>Password:</Label>
           <Input
+            name="password"
             type="text"
             onChange={handleChange}
             placeholder={currentUser.tags}
@@ -195,26 +158,7 @@ const Panel = ({ user }) => {
           </ButtonContainer>
         </div>
       )}
-      {activeTab === "following" && (
-        <div>
-          {/* <ul style={{ fontSize: "20px" }}>
-            {subscribedUsers.map((user) => (
-              <li
-              style={{ cursor: "pointer", marginBottom: "10px" }}
-              key={user._id}
-              onClick={() =>
-                navigate(`/users/find/${user._id}`, {
-                  state: { userId: user._id },
-                })
-              }
-              >
-                {user.name} ({user.subscribers} subscribers)
-              </li>
-            ))}
-            console.log(subscribedUsers)
-          </ul> */}
-        </div>
-      )}
+      {activeTab === "following" && <div></div>}
     </Container>
   );
 };
