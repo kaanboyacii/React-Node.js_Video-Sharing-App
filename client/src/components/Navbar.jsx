@@ -107,11 +107,10 @@ const Navbar = () => {
   };
 
   const handleLogout = async (e) => {
+    window.location.href = "/";
     e.preventDefault();
     dispatch(logout());
     const res = await axios.post("/auth/logout");
-    navigate("/");
-    window.location.reload();
   };
 
   return (
