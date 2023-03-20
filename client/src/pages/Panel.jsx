@@ -95,6 +95,22 @@ const Panel = ({ user }) => {
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchSubscribedUsers = async () => {
+      try {
+        const subscribedUserIds = currentUser.subscribedUsers;
+        const usersRes = await Promise.all(
+          subscribedUserIds.map((userId) => axios.get(`/users/find/${userId}`))
+        );
+        const subscribedUsers = usersRes.map((res) => res.data);
+        setSubscribedUsers(subscribedUsers);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSubscribedUsers();
+  }, [currentUser]);
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -158,7 +174,23 @@ const Panel = ({ user }) => {
           </ButtonContainer>
         </div>
       )}
-      {activeTab === "following" && <div></div>}
+      {activeTab === "following" && (
+        <ul style={{ fontSize: "20px" }}>
+          {subscribedUsers.map((user) => (
+            <li
+              style={{ cursor: "pointer", marginBottom: "10px" }}
+              key={user._id}
+              onClick={() =>
+                navigate(`/users/find/${user._id}`, {
+                  state: { userId: user._id },
+                })
+              }
+            >
+              {user.name} ({user.subscribers} subscribers)
+            </li>
+          ))}
+        </ul>
+      )}
     </Container>
   );
 };
