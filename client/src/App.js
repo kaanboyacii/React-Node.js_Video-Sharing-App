@@ -11,6 +11,7 @@ import Search from "./pages/Search";
 import Category from "./pages/Category";
 import Channel from "./pages/Channel";
 import Library from "./pages/Library";
+import LikedVideos from "./pages/LikedVideos";
 import Panel from "./pages/Panel";
 
 const Container = styled.div`
@@ -46,6 +47,9 @@ function App() {
                   <Route path="subscriptions" element={<Home type="sub" />} />
                   <Route path="users/library">
                     <Route path=":id" element={<Library />} />
+                  </Route>
+                  <Route path="users/likedvideos">
+                    <Route path=":id" element={<LikedVideos />} />
                   </Route>
                   <Route path="specificTags" element={<Category type="specificTags" />} />
                   <Route path="search" element={<Search/>} />

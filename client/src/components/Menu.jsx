@@ -14,8 +14,7 @@ import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import LiveTvOutlinedIcon from "@mui/icons-material/LiveTvOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import FlagOutlinedIcon from "@mui/icons-material/FlagOutlined";
-import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -125,9 +124,9 @@ const Menu = ({ darkMode, setDarkMode }) => {
           <VideoLibraryOutlinedIcon />
           Library
         </Item>
-        <Item>
-          <HistoryOutlinedIcon />
-          History
+        <Item onClick={() => navigate(`/users/likedvideos/${currentUser._id}`)}>
+          <ThumbUpOffAltIcon />
+          Liked Videos
         </Item>
         <Hr />
         {!currentUser && (
