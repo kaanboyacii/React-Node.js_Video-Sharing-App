@@ -14,7 +14,7 @@ import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import LiveTvOutlinedIcon from "@mui/icons-material/LiveTvOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -120,15 +120,21 @@ const Menu = ({ darkMode, setDarkMode }) => {
           </Item>
         </Link>
         <Hr />
-        <Item onClick={() => navigate(`/users/library/${currentUser._id}`)}>
-          <VideoLibraryOutlinedIcon />
-          Library
-        </Item>
-        <Item onClick={() => navigate(`/users/likedvideos/${currentUser._id}`)}>
-          <ThumbUpOffAltIcon />
-          Liked Videos
-        </Item>
-        <Hr />
+        {currentUser && (
+          <>
+            <Item onClick={() => navigate(`/users/library/${currentUser._id}`)}>
+              <VideoLibraryOutlinedIcon />
+              Library
+            </Item>
+            <Item
+              onClick={() => navigate(`/users/likedvideos/${currentUser._id}`)}
+            >
+              <ThumbUpOffAltIcon />
+              Liked Videos
+            </Item>
+            <Hr />
+          </>
+        )}
         {!currentUser && (
           <>
             <Login>
