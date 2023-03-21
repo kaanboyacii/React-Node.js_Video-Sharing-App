@@ -31,6 +31,7 @@ const Tab = styled.div`
   padding: 10px;
   cursor: pointer;
   border-bottom: ${(props) => (props.active ? "2px solid red" : "none")};
+  color: ${({ theme }) => theme.textSoft};
 `;
 
 const Gallery = styled.div`
@@ -85,6 +86,11 @@ const Button = styled.button`
 
 const Label = styled.label`
   font-size: 14px;
+  color: ${({ theme }) => theme.text};
+`;
+
+const Li = styled.li`
+  font-size: 20px;
   color: ${({ theme }) => theme.text};
 `;
 
@@ -175,9 +181,9 @@ const Panel = ({ user }) => {
         </div>
       )}
       {activeTab === "following" && (
-        <ul style={{ fontSize: "20px" }}>
+        <ul>
           {subscribedUsers.map((user) => (
-            <li
+            <Li
               style={{ cursor: "pointer", marginBottom: "10px" }}
               key={user._id}
               onClick={() =>
@@ -187,7 +193,7 @@ const Panel = ({ user }) => {
               }
             >
               {user.name} ({user.subscribers} subscribers)
-            </li>
+            </Li>
           ))}
         </ul>
       )}
