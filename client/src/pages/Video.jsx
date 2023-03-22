@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
-import ReplyOutlinedIcon from "@mui/icons-material/ReplyOutlined";
+import FlagCircleIcon from "@mui/icons-material/FlagCircle";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
@@ -21,7 +21,6 @@ import { format } from "timeago.js";
 import Recommendation from "../components/Recommendation";
 import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
 import UpdateVideo from "../components/UpdateVideo";
-import AddTaskOutlined from "@mui/icons-material/AddTaskOutlined";
 
 const Container = styled.div`
   display: flex;
@@ -203,7 +202,6 @@ const Video = () => {
       setIsSaved(false);
     }
   }, [currentUser, currentVideo]);
-  
 
   const handleSave = async () => {
     try {
@@ -292,9 +290,6 @@ const Video = () => {
                 </Button>
               </div>
             )}
-            <Button>
-              <ReplyOutlinedIcon /> Share
-            </Button>
             <Button onClick={handleSave}>
               {isSaved ? (
                 <>
@@ -307,6 +302,9 @@ const Video = () => {
                   Save
                 </>
               )}
+            </Button>
+            <Button>
+              <FlagCircleIcon /> Report
             </Button>
           </Buttons>
         </Details>
