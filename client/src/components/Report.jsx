@@ -57,11 +57,10 @@ const Label = styled.label`
   font-size: 14px;
 `;
 
-const Report = () => {
+const Report = ({ setReportOpen }) => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   const [inputs, setInputs] = useState({});
-  const [reportOpen, setReportOpen] = useState(true);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -70,7 +69,8 @@ const Report = () => {
     });
   };
 
-  const handleReport = async () => {
+  const handleReport = async (e) => {
+    e.preventDefault();
     try {
       const res = await axios.post("/reports/", {
         ...inputs,

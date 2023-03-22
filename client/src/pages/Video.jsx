@@ -164,10 +164,6 @@ const Video = () => {
   const path = useLocation().pathname.split("/")[2];
   const navigate = useNavigate();
 
-  const handleReportClick = () => {
-    setReportOpen(!reportOpen);
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -310,7 +306,7 @@ const Video = () => {
                 </>
               )}
             </Button>
-            <Button onClick={handleReportClick}>
+            <Button>
               <FlagCircleIcon onClick={() => setReportOpen(true)} /> Report
             </Button>
           </Buttons>
@@ -354,7 +350,7 @@ const Video = () => {
       </Content>
       <Recommendation tags={currentVideo.tags} />
       {open && <UpdateVideo setOpen={setOpen} />}
-      {reportOpen && <ReportVideo reportOpen={setReportOpen} />}
+      {reportOpen && <ReportVideo setReportOpen={setReportOpen} />}
     </Container>
   );
 };
