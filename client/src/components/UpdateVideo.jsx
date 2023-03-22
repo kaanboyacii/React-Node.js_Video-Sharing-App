@@ -75,9 +75,7 @@ const Label = styled.label`
 const UpdateVideo = ({ setOpen }) => {
   const { currentVideo } = useSelector((state) => state.video);
   const [img, setImg] = useState(undefined);
-  const [video, setVideo] = useState(undefined);
   const [imgPerc, setImgPerc] = useState(0);
-  const [videoPerc, setVideoPerc] = useState(0);
   const [inputs, setInputs] = useState({});
   const [tags, setTags] = useState([]);
   const navigate = useNavigate();

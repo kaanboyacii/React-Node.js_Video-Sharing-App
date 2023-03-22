@@ -21,6 +21,7 @@ import { format } from "timeago.js";
 import Recommendation from "../components/Recommendation";
 import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
 import UpdateVideo from "../components/UpdateVideo";
+import ReportVideo from "../components/Report.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -158,9 +159,14 @@ const Video = () => {
   const { currentVideo } = useSelector((state) => state.video);
   const [channel, setChannel] = useState({});
   const [open, setOpen] = useState(false);
+  const [reportOpen, setReportOpen] = useState(false);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
   const navigate = useNavigate();
+
+  const handleReportClick = () => {
+    setReportOpen(!reportOpen);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -195,6 +201,7 @@ const Video = () => {
   };
 
   const [isSaved, setIsSaved] = useState(false);
+
   useEffect(() => {
     if (currentUser) {
       setIsSaved(currentUser.library?.includes(currentVideo?._id) || false);
@@ -303,8 +310,8 @@ const Video = () => {
                 </>
               )}
             </Button>
-            <Button>
-              <FlagCircleIcon /> Report
+            <Button onClick={handleReportClick}>
+              <FlagCircleIcon onClick={() => setReportOpen(true)} /> Report
             </Button>
           </Buttons>
         </Details>
@@ -347,6 +354,7 @@ const Video = () => {
       </Content>
       <Recommendation tags={currentVideo.tags} />
       {open && <UpdateVideo setOpen={setOpen} />}
+      {reportOpen && <ReportVideo reportOpen={setReportOpen} />}
     </Container>
   );
 };
