@@ -17,8 +17,8 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 450px;
-  height: 450px;
+  width: 380px;
+  height: 380px;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
   padding: 20px;
@@ -57,10 +57,11 @@ const Label = styled.label`
   font-size: 14px;
 `;
 
-const Report = ({ setReportOpen }) => {
+const Report = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   const [inputs, setInputs] = useState({});
+  const [reportOpen, setReportOpen] = useState(true);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -89,7 +90,7 @@ const Report = ({ setReportOpen }) => {
       <Wrapper>
         <Close onClick={() => setReportOpen(false)}>X</Close>
         <Title>Report a Video</Title>
-        <Label>Video:</Label>
+        <Label>Your Message:</Label>
         <Desc
           placeholder="Message"
           name="message"
