@@ -3,6 +3,13 @@ import { useSelector } from "react-redux";
 import styled from "styled-components";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  getStorage,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from "firebase/storage";
+import app from "../firebase";
 
 const Container = styled.div`
   display: flex;
@@ -34,19 +41,6 @@ const Tab = styled.div`
   color: ${({ theme }) => theme.textSoft};
 `;
 
-const Gallery = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 10px;
-`;
-
-const Photo = styled.img`
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-radius: 5px;
-`;
-
 const Title = styled.h1`
   text-align: center;
   color: ${({ theme }) => theme.text};
@@ -63,6 +57,18 @@ const Input = styled.input`
   width: 100%;
   height: 40px;
   font-size: 16px;
+  margin: 10px 0;
+  box-shadow: 0 0 5px ${({ theme }) => theme.soft};
+`;
+const InputAv = styled.input`
+  border: 1px solid ${({ theme }) => theme.soft};
+  color: ${({ theme }) => theme.text};
+  background-color: ${({ theme }) => theme.soft};
+  border-radius: 3px;
+  padding: 10px;
+  background-color: transparent;
+  z-index: 999;
+  width: 25%;
   margin: 10px 0;
   box-shadow: 0 0 5px ${({ theme }) => theme.soft};
 `;
@@ -100,6 +106,8 @@ const Panel = ({ user }) => {
   const [subscribedUsers, setSubscribedUsers] = useState([]);
   const [reports, setReports] = useState([]);
   const [inputs, setInputs] = useState({});
+  const [img, setImg] = useState(undefined);
+  const [imgPerc, setImgPerc] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -137,6 +145,7 @@ const Panel = ({ user }) => {
       return { ...prev, [e.target.name]: e.target.value };
     });
   };
+
   const handleUpdate = async (e) => {
     e.preventDefault();
     const res = await axios.put(`/users/${currentUser._id}`, { ...inputs });
@@ -144,15 +153,89 @@ const Panel = ({ user }) => {
     window.location.reload();
   };
 
+  const handleUpdateImg = async (e) => {
+    e.preventDefault();
+    try {
+      // Önce img değerini güncelliyoruz
+      if (img) {
+        const imgRes = await axios.put(`/users/updateImg/${currentUser._id}`, {
+          img,
+        });
+        if (imgRes.status === 200) {
+          // img başarıyla güncellendiğinde, uploadFile fonksiyonu çağrılır
+          uploadFile(img);
+        }
+      } else {
+        navigate(`/users/panel/${currentUser._id}`);
+      }
+      // Sayfayı yenileriz
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const uploadFile = (file) => {
+    const storage = getStorage(app);
+    const fileName = new Date().getTime() + file.name;
+    const storageRef = ref(storage, fileName);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log("Upload is " + progress + "% done");
+        switch (snapshot.state) {
+          case "paused":
+            console.log("Upload is paused");
+            break;
+          case "running":
+            console.log("Upload is running");
+            break;
+          default:
+            break;
+        }
+      },
+      (error) => {},
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          // img url'sini güncelliyoruz
+          console.log(downloadURL)
+          axios.put(`/users/updateImg/${currentUser._id}`, {
+            img: downloadURL,
+          });
+        });
+      }
+    );
+  };
+
+  useEffect(() => {
+    if (img) {
+      uploadFile(img);
+    }
+  }, [img]);
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
-  
   return (
     <Container>
-      <Avatar src={currentUser.img} alt={`${currentUser.name}'s avatar`} />
       <Title style={{ fontSize: "40px" }}>{currentUser.name}</Title>
+      <Avatar src={currentUser.img} alt={`${currentUser.name}'s avatar`} />
+      <Label>Avatar:</Label>
+      {imgPerc > 0 ? (
+        "Uploading:" + imgPerc + "%"
+      ) : (
+        <InputAv
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImg(e.target.files[0])}
+        />
+      )}
+      <Button onClick={handleUpdateImg}>Update Photo</Button>
       <Tabs>
         <Tab
           active={activeTab === "profile"}
@@ -220,18 +303,17 @@ const Panel = ({ user }) => {
         </ul>
       )}
       {activeTab === "reports" && (
-        
         <ul>
-        {reports.map((report) => (
-          <Li
-            style={{ cursor: "pointer", marginBottom: "10px" }}
-            key={report._id}
-          >
-            {report.message}
-            <p>{report.createdAt}</p>
-          </Li>
-        ))}
-      </ul>
+          {reports.map((report) => (
+            <Li
+              style={{ cursor: "pointer", marginBottom: "10px" }}
+              key={report._id}
+            >
+              {report.message}
+              <p>{report.createdAt}</p>
+            </Li>
+          ))}
+        </ul>
       )}
     </Container>
   );

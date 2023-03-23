@@ -10,10 +10,14 @@ import {
     library,
     addToLibrary,
     removeToLibrary,
+    updateImg,
 } from "../controllers/user.js";
 import { verifyToken } from "../verifyToken.js";
 
 const router = express.Router();
+
+//update user's image
+router.put("/updateImg/:id", verifyToken, updateImg);
 
 //update user
 router.put("/:id", verifyToken, update);
