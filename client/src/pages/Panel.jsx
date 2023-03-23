@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import axios from "axios";
@@ -18,13 +18,6 @@ const Container = styled.div`
   background-color: transparent;
   padding: 20px;
   color: white;
-`;
-
-const Avatar = styled.img`
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  margin-bottom: 20px;
 `;
 
 const Tabs = styled.div`
@@ -60,17 +53,26 @@ const Input = styled.input`
   margin: 10px 0;
   box-shadow: 0 0 5px ${({ theme }) => theme.soft};
 `;
+
+const Avatar = styled.img`
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  cursor: pointer;
+`;
+
 const InputAv = styled.input`
-  border: 1px solid ${({ theme }) => theme.soft};
-  color: ${({ theme }) => theme.text};
-  background-color: ${({ theme }) => theme.soft};
-  border-radius: 3px;
-  padding: 10px;
-  background-color: transparent;
-  z-index: 999;
-  width: 25%;
-  margin: 10px 0;
-  box-shadow: 0 0 5px ${({ theme }) => theme.soft};
+  display: none;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid ${({ theme }) => theme.soft};
+  background-size: cover;
+  background-position: center;
+  background-image: ${({ img }) => (img ? `url(${img})` : "none")};
+  cursor: pointer;
+  transition: border-color 0.2s ease-in-out;
 `;
 
 const ButtonContainer = styled.div`
@@ -109,6 +111,22 @@ const Panel = ({ user }) => {
   const [img, setImg] = useState(undefined);
   const [imgPerc, setImgPerc] = useState(0);
   const navigate = useNavigate();
+  const [avatarImage, setAvatarImage] = useState("");
+  const inputRef = useRef(null);
+
+  const handleAvatarClick = () => {
+    inputRef.current.click();
+  };
+
+  const handleInputChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => {
+      setAvatarImage(reader.result);
+    };
+  };
 
   useEffect(() => {
     const fetchSubscribedUsers = async () => {
@@ -156,23 +174,20 @@ const Panel = ({ user }) => {
   const handleUpdateImg = async (e) => {
     e.preventDefault();
     try {
-      // Önce img değerini güncelliyoruz
       if (img) {
         const imgRes = await axios.put(`/users/updateImg/${currentUser._id}`, {
           img,
         });
         if (imgRes.status === 200) {
-          // img başarıyla güncellendiğinde, uploadFile fonksiyonu çağrılır
           uploadFile(img);
         }
       } else {
         navigate(`/users/panel/${currentUser._id}`);
       }
-      // Sayfayı yenileriz
-      window.location.reload();
     } catch (error) {
       console.log(error);
     }
+    window.location.reload();
   };
 
   const uploadFile = (file) => {
@@ -202,7 +217,6 @@ const Panel = ({ user }) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           // img url'sini güncelliyoruz
-          console.log(downloadURL)
           axios.put(`/users/updateImg/${currentUser._id}`, {
             img: downloadURL,
           });
@@ -224,7 +238,11 @@ const Panel = ({ user }) => {
   return (
     <Container>
       <Title style={{ fontSize: "40px" }}>{currentUser.name}</Title>
-      <Avatar src={currentUser.img} alt={`${currentUser.name}'s avatar`} />
+      <Avatar
+        src={currentUser.img}
+        alt={`${currentUser.name}'s avatar`}
+        onClick={handleAvatarClick}
+      />
       <Label>Avatar:</Label>
       {imgPerc > 0 ? (
         "Uploading:" + imgPerc + "%"
@@ -232,6 +250,8 @@ const Panel = ({ user }) => {
         <InputAv
           type="file"
           accept="image/*"
+          ref={inputRef}
+          img={currentUser.img}
           onChange={(e) => setImg(e.target.files[0])}
         />
       )}
