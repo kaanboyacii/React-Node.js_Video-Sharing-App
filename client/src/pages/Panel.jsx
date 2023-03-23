@@ -125,10 +125,6 @@ const Panel = ({ user }) => {
         const data = response.data;
         const reports = data.filter((item) => item.userId === currentUser._id);
         setReports(reports);
-        console.log(reports);
-        // const reports = dataReports.map((res) => res.data);
-        // setReports(reports);
-        // console.log(reports);
       } catch (error) {
         console.log(error);
       }
