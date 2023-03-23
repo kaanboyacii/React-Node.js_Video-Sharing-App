@@ -7,7 +7,6 @@ import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import Comments from "../components/Comments";
-import Card from "../components/Card";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
@@ -336,7 +335,6 @@ const Video = () => {
                 {channel.name}
               </ChannelName>
               <ChannelCounter>{channel.subscribers} subscribers</ChannelCounter>
-              <Description>{currentVideo.escription}</Description>
             </ChannelDetail>
           </ChannelInfo>
           <Subscribe onClick={handleSub} disabled={!currentUser}>

@@ -98,6 +98,7 @@ const Panel = ({ user }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [activeTab, setActiveTab] = useState("profile");
   const [subscribedUsers, setSubscribedUsers] = useState([]);
+  const [reports, setReports] = useState([]);
   const [inputs, setInputs] = useState({});
   const navigate = useNavigate();
 
@@ -117,9 +118,23 @@ const Panel = ({ user }) => {
     fetchSubscribedUsers();
   }, [currentUser]);
 
-  const handleTabClick = (tab) => {
-    setActiveTab(tab);
-  };
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const response = await axios.get(`/reports/`);
+        const data = response.data;
+        const reports = data.filter((item) => item.userId === currentUser._id);
+        setReports(reports);
+        console.log(reports);
+        // const reports = dataReports.map((res) => res.data);
+        // setReports(reports);
+        // console.log(reports);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchReports();
+  }, [currentUser]);
 
   const handleChange = (e) => {
     setInputs((prev) => {
@@ -133,6 +148,11 @@ const Panel = ({ user }) => {
     window.location.reload();
   };
 
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
+
+  
   return (
     <Container>
       <Avatar src={currentUser.img} alt={`${currentUser.name}'s avatar`} />
@@ -149,6 +169,12 @@ const Panel = ({ user }) => {
           onClick={() => handleTabClick("following")}
         >
           Following
+        </Tab>
+        <Tab
+          active={activeTab === "reports"}
+          onClick={() => handleTabClick("reports")}
+        >
+          Reports
         </Tab>
       </Tabs>
       {activeTab === "profile" && (
@@ -196,6 +222,20 @@ const Panel = ({ user }) => {
             </Li>
           ))}
         </ul>
+      )}
+      {activeTab === "reports" && (
+        
+        <ul>
+        {reports.map((report) => (
+          <Li
+            style={{ cursor: "pointer", marginBottom: "10px" }}
+            key={report._id}
+          >
+            {report.message}
+            <p>{report.createdAt}</p>
+          </Li>
+        ))}
+      </ul>
       )}
     </Container>
   );
