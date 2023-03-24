@@ -28,9 +28,44 @@ const Container = styled.div`
   font-size: 14px;
   position: sticky;
   top: 0;
-  bottom: 0; // Eklendi
-  overflow-y: auto; // Eklendi
+  bottom: 0;
+  overflow-y: auto;
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: ${({ theme }) => theme.bgLighter};
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.primaryColor};
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: ${({ theme }) => theme.primaryColorLight};
+  }
+
+  scrollbar-width: thin;
+  scrollbar-color: ${({ theme }) => theme.bgLighter};
+
+  &::-webkit-scrollbar-track {
+    background-color: ${({ theme }) => theme.bgLighter};
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${({ theme }) => theme.primaryColor};
+    border-radius: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: ${({ theme }) => theme.primaryColorLight};
+  }
 `;
+
 const Wrapper = styled.div`
   padding: 18px 26px;
 `;
@@ -148,8 +183,8 @@ const Menu = ({ darkMode, setDarkMode }) => {
         </Link>
         {currentUser && (
           <>
-          <Hr />
-          <Title>Subscribed channels</Title>
+            <Hr />
+            <Title>Subscribed channels</Title>
             {subscribedUsers.map((user) => (
               <Item
                 style={{ cursor: "pointer", marginBottom: "10px" }}
@@ -163,7 +198,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
                 <ChannelImg src={user.img} />
                 {user.name}
               </Item>
-            ))}          
+            ))}
           </>
         )}
         <Hr />
