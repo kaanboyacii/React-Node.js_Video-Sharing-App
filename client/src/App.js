@@ -16,13 +16,13 @@ import Panel from "./pages/Panel";
 
 const Container = styled.div`
   display: flex;
-  min-height: 100vh;
 `;
 
 const Main = styled.div`
-  flex: 9;
+  flex: 7;
   background-color: ${({ theme }) => theme.bg};
 `;
+
 const Wrapper = styled.div`
   padding: 22px 96px;
 `;

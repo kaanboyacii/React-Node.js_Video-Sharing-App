@@ -19,7 +19,6 @@ import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightne
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-
 const Container = styled.div`
   flex: 1;
   flex-direction: column;
@@ -29,10 +28,13 @@ const Container = styled.div`
   font-size: 14px;
   position: sticky;
   top: 0;
+  bottom: 0; // Eklendi
+  overflow-y: auto; // Eklendi
 `;
 const Wrapper = styled.div`
   padding: 18px 26px;
 `;
+
 const Logo = styled.div`
   display: flex;
   align-items: center;
