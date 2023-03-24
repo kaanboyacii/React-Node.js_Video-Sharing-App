@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import UyuTube from "../img/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
@@ -18,6 +18,7 @@ import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import SettingsBrightnessOutlinedIcon from "@mui/icons-material/SettingsBrightnessOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
 
 const Container = styled.div`
   flex: 1;
@@ -43,6 +44,12 @@ const Logo = styled.div`
 
 const Img = styled.img`
   height: 25px;
+`;
+
+const ChannelImg = styled.img`
+  border-radius: 50%;
+  height: 25px;
+  width: 25px;
 `;
 
 const Item = styled.div`
@@ -87,7 +94,25 @@ const Title = styled.h2`
 
 const Menu = ({ darkMode, setDarkMode }) => {
   const { currentUser } = useSelector((state) => state.user);
+  const [subscribedUsers, setSubscribedUsers] = useState([]);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchSubscribedUsers = async () => {
+      try {
+        const subscribedUserIds = currentUser.subscribedUsers;
+        const usersRes = await Promise.all(
+          subscribedUserIds.map((userId) => axios.get(`/users/find/${userId}`))
+        );
+        const subscribedUsers = usersRes.map((res) => res.data);
+        setSubscribedUsers(subscribedUsers);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchSubscribedUsers();
+  }, [currentUser]);
 
   return (
     <Container>
@@ -119,6 +144,26 @@ const Menu = ({ darkMode, setDarkMode }) => {
             Subscriptions
           </Item>
         </Link>
+        {currentUser && (
+          <>
+          <Hr />
+          <Title>Subscribed channels</Title>
+            {subscribedUsers.map((user) => (
+              <Item
+                style={{ cursor: "pointer", marginBottom: "10px" }}
+                key={user._id}
+                onClick={() =>
+                  navigate(`/users/find/${user._id}`, {
+                    state: { userId: user._id },
+                  })
+                }
+              >
+                <ChannelImg src={user.img} />
+                {user.name}
+              </Item>
+            ))}          
+          </>
+        )}
         <Hr />
         {currentUser && (
           <>
