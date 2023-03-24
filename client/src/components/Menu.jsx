@@ -49,21 +49,9 @@ const Container = styled.div`
     background-color: ${({ theme }) => theme.primaryColorLight};
   }
 
-  scrollbar-width: thin;
-  scrollbar-color: ${({ theme }) => theme.bgLighter};
-
-  &::-webkit-scrollbar-track {
-    background-color: ${({ theme }) => theme.bgLighter};
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${({ theme }) => theme.primaryColor};
-    border-radius: 10px;
-  }
-
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: ${({ theme }) => theme.primaryColorLight};
-  }
+  /* Scrollbar'ı gizlemek için */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 `;
 
 const Wrapper = styled.div`
