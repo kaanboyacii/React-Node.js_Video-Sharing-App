@@ -6,6 +6,7 @@ import VideoRoutes from "./routes/videos.js"
 import CommentRoutes from "./routes/comments.js"
 import AuthRoutes from "./routes/auth.js"
 import ReportRoutes from "./routes/reports.js"
+import PlaylistRoutes from "./routes/playlists.js"
 import cookieParser from "cookie-parser";
 
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/users",UserRoutes);
 app.use("/api/videos",VideoRoutes);
 app.use("/api/comments",CommentRoutes);
 app.use("/api/reports",ReportRoutes);
+app.use("/api/playlists",PlaylistRoutes);
 
 app.use((err, req, res, next)=>{
     const status = err.status || 500;
