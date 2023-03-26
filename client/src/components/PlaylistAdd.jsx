@@ -122,8 +122,15 @@ const Report = ({ setPlaylistOpen }) => {
     setIsFormVisible(true);
   };
 
-  const handleSubmit = () => {
-    setIsFormVisible(true);
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const res = await axios.post(`/playlists/`, { ...inputs });
+      console.log(res.data);
+      setPlaylistOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
   };
   return (
     <Container>
@@ -151,7 +158,9 @@ const Report = ({ setPlaylistOpen }) => {
                 required
               />
             </label>
-            <ButtonG style={{marginLeft:"10px"}} type="submit">Create</ButtonG>
+            <ButtonG style={{ marginLeft: "10px" }} type="submit">
+              Create
+            </ButtonG>
           </form>
         )}
       </Wrapper>
