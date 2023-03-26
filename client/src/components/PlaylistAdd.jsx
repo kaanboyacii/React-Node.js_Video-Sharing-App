@@ -80,8 +80,9 @@ const Report = ({ setPlaylistOpen }) => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   const [inputs, setInputs] = useState({});
-  const [playlists, setPlaylists] = useState([]);
   const [isFormVisible, setIsFormVisible] = useState(false);
+  const [playlists, setPlaylists] = useState([]);
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -118,6 +119,10 @@ const Report = ({ setPlaylistOpen }) => {
     }
   };
 
+  const handlePlaylistChange = (event) => {
+    setSelectedPlaylistId(event.target.value);
+  };
+
   const handleCreatePlaylist = () => {
     setIsFormVisible(true);
   };
@@ -138,14 +143,21 @@ const Report = ({ setPlaylistOpen }) => {
         <Close onClick={() => setPlaylistOpen(false)}>X</Close>
         <Title>Add video to playlist</Title>
         <Label>Select playlist:</Label>
-        <select name="playlist" onChange={handleChange}>
+        <select
+          name="playlist"
+          onChange={handlePlaylistChange}
+          value={selectedPlaylistId}
+        >
+          <option value="">Select a playlist</option>
           {playlists.map((playlist) => (
             <option key={playlist._id} value={playlist._id}>
               {playlist.title}
             </option>
           ))}
         </select>
-        <Button onClick={handleAddToPlaylist}>Add to playlist</Button>
+        <Button onClick={() => handleAddToPlaylist(selectedPlaylistId)}>
+          Add to playlist
+        </Button>
         <ButtonG onClick={handleCreatePlaylist}>Create new playlist</ButtonG>
         {isFormVisible && (
           <form onSubmit={handleSubmit}>
