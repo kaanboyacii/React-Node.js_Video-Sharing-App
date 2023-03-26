@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
 import ThumbDownOffAltOutlinedIcon from "@mui/icons-material/ThumbDownOffAltOutlined";
+import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
+import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import FlagCircleIcon from "@mui/icons-material/FlagCircle";
 import AddTaskOutlinedIcon from "@mui/icons-material/AddTaskOutlined";
 import ThumbDownIcon from "@mui/icons-material/ThumbDown";
@@ -18,9 +20,9 @@ import {
 } from "../redux/userSlice";
 import { format } from "timeago.js";
 import Recommendation from "../components/Recommendation";
-import AccountCircleOutlined from "@mui/icons-material/AccountCircleOutlined";
 import UpdateVideo from "../components/UpdateVideo";
 import ReportVideo from "../components/Report.jsx";
+import PlaylistAdd from "../components/PlaylistAdd.jsx";
 
 const Container = styled.div`
   display: flex;
@@ -158,6 +160,7 @@ const Video = () => {
   const { currentVideo } = useSelector((state) => state.video);
   const [channel, setChannel] = useState({});
   const [open, setOpen] = useState(false);
+  const [playlistOpen, setPlaylistOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
   const dispatch = useDispatch();
   const path = useLocation().pathname.split("/")[2];
@@ -196,7 +199,6 @@ const Video = () => {
   };
 
   const [isSaved, setIsSaved] = useState(false);
-
   useEffect(() => {
     if (currentUser) {
       setIsSaved(currentUser.library?.includes(currentVideo?._id) || false);
@@ -305,6 +307,9 @@ const Video = () => {
                 </>
               )}
             </Button>
+            <Button onClick={() => setPlaylistOpen(true)}>
+              <PlaylistAddIcon/> Add to Playlist
+            </Button>
             <Button>
               <FlagCircleIcon onClick={() => setReportOpen(true)} /> Report
             </Button>
@@ -349,6 +354,7 @@ const Video = () => {
       <Recommendation tags={currentVideo.tags} />
       {open && <UpdateVideo setOpen={setOpen} />}
       {reportOpen && <ReportVideo setReportOpen={setReportOpen} />}
+      {playlistOpen && <PlaylistAdd setPlaylistOpen={setPlaylistOpen} />}
     </Container>
   );
 };
