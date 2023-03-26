@@ -17,8 +17,8 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  width: 380px;
-  height: 380px;
+  width: 340px;
+  height: 300px;
   background-color: ${({ theme }) => theme.bgLighter};
   color: ${({ theme }) => theme.text};
   padding: 20px;
@@ -37,13 +37,16 @@ const Title = styled.h1`
   text-align: center;
 `;
 
-const Desc = styled.textarea`
+const Input = styled.input`
   border: 1px solid ${({ theme }) => theme.soft};
   color: ${({ theme }) => theme.text};
   border-radius: 3px;
   padding: 10px;
   background-color: transparent;
+  z-index: 999;
+  margin-left: 10px;
 `;
+
 const Button = styled.button`
   border-radius: 3px;
   border: none;
@@ -53,6 +56,22 @@ const Button = styled.button`
   background-color: ${({ theme }) => theme.soft};
   color: ${({ theme }) => theme.textSoft};
 `;
+const ButtonG = styled.button`
+  background-color: #32cd32;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #228b22;
+  }
+`;
+
 const Label = styled.label`
   font-size: 14px;
 `;
@@ -61,6 +80,8 @@ const Report = ({ setPlaylistOpen }) => {
   const { currentUser } = useSelector((state) => state.user);
   const { currentVideo } = useSelector((state) => state.video);
   const [inputs, setInputs] = useState({});
+  const [playlists, setPlaylists] = useState([]);
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -69,27 +90,70 @@ const Report = ({ setPlaylistOpen }) => {
     });
   };
 
-  const handleReport = async (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    const fetchPlaylists = async () => {
+      try {
+        const res = await axios.get("/playlists");
+        const filteredPlaylists = res.data.filter(
+          (playlist) => playlist.userId === currentUser._id
+        );
+        setPlaylists(filteredPlaylists);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchPlaylists();
+  }, [currentUser._id]);
+
+  const handleAddToPlaylist = async (playlistId) => {
     try {
-      const res = await axios.post("/reports/", {
-        ...inputs,
-        userId: currentUser._id,
-        videoId: currentVideo._id,
-      });
+      const res = await axios.post(
+        `/playlists/addVideo/${playlistId}/${currentVideo._id}`
+      );
       console.log(res.data);
       setPlaylistOpen(false);
-      window.location.reload();
     } catch (err) {
       console.error(err);
     }
   };
 
+  const handleCreatePlaylist = () => {
+    setIsFormVisible(true);
+  };
+
+  const handleSubmit = () => {
+    setIsFormVisible(true);
+  };
   return (
     <Container>
       <Wrapper>
         <Close onClick={() => setPlaylistOpen(false)}>X</Close>
         <Title>Add video to playlist</Title>
+        <Label>Select playlist:</Label>
+        <select name="playlist" onChange={handleChange}>
+          {playlists.map((playlist) => (
+            <option key={playlist._id} value={playlist._id}>
+              {playlist.title}
+            </option>
+          ))}
+        </select>
+        <Button onClick={handleAddToPlaylist}>Add to playlist</Button>
+        <ButtonG onClick={handleCreatePlaylist}>Create new playlist</ButtonG>
+        {isFormVisible && (
+          <form onSubmit={handleSubmit}>
+            <label>
+              Title:
+              <Input
+                type="text"
+                name="title"
+                onChange={handleChange}
+                required
+              />
+            </label>
+            <ButtonG style={{marginLeft:"10px"}} type="submit">Create</ButtonG>
+          </form>
+        )}
       </Wrapper>
     </Container>
   );
