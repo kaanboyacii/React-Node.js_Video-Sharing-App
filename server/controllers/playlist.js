@@ -3,6 +3,15 @@ import User from "../models/User.js"
 import Video from "../models/Video.js"
 import Playlist from "../models/Playlist.js"
 
+export const getAllPlaylists = async (req, res, next) => {
+  try {
+    const reports = await Playlist.find({});
+    res.status(200).json(reports);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const addPlaylist = async (req, res, next) => {
     const newPlaylist = new Playlist({ ...req.body, userId: req.user.id });
     try {
