@@ -115,6 +115,7 @@ const Report = ({ setPlaylistOpen }) => {
       console.log(res.data);
       setPlaylistOpen(false);
     } catch (err) {
+      alert(err.response.data.message);
       console.error(err);
     }
   };

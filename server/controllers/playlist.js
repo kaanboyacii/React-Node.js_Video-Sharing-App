@@ -23,18 +23,23 @@ export const addPlaylist = async (req, res, next) => {
 };
 
 export const addVideoToPlaylist = async (req, res, next) => {
-    const playlistId = req.params.id;
-    const videoId = req.params.videoId;
-    try {
-      const playlist = await Playlist.findById(playlistId);
-      if (!playlist) {
-        return res.status(404).json({ message: "Playlist not found" });
-      }
-      playlist.videos.push(videoId);
-      await playlist.save();
-      res.status(200).json({ message: "The video has been added to the playlist" });
-    } catch (err) {
-      next(err);
+  const playlistId = req.params.id;
+  const videoId = req.params.videoId;
+  try {
+    const playlist = await Playlist.findById(playlistId);
+    if (!playlist) {
+      return res.status(404).json({ message: "Playlist not found" });
     }
-  };
-  
+
+    // Check if the videoId already exists in the videos array
+    if (playlist.videos.includes(videoId)) {
+      return res.status(400).json({ message: "Video already added to the playlist" });
+    }
+
+    playlist.videos.push(videoId);
+    await playlist.save();
+    res.status(200).json({ message: "The video has been added to the playlist" });
+  } catch (err) {
+    next(err);
+  }
+};
