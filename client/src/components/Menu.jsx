@@ -5,7 +5,7 @@ import HomeIcon from "@mui/icons-material/Home";
 import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
 import SubscriptionsOutlinedIcon from "@mui/icons-material/SubscriptionsOutlined";
 import VideoLibraryOutlinedIcon from "@mui/icons-material/VideoLibraryOutlined";
-import HistoryOutlinedIcon from "@mui/icons-material/HistoryOutlined";
+import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import LibraryMusicOutlinedIcon from "@mui/icons-material/LibraryMusicOutlined";
 import SportsEsportsOutlinedIcon from "@mui/icons-material/SportsEsportsOutlined";
 import SportsBasketballOutlinedIcon from "@mui/icons-material/SportsBasketballOutlined";
@@ -195,6 +195,10 @@ const Menu = ({ darkMode, setDarkMode }) => {
             <Item onClick={() => navigate(`/users/library/${currentUser._id}`)}>
               <VideoLibraryOutlinedIcon />
               Library
+            </Item>
+            <Item onClick={() => navigate(`/users/playlists/${currentUser._id}`)}>
+              <PlaylistPlayIcon />
+              Playlists
             </Item>
             <Item
               onClick={() => navigate(`/users/likedvideos/${currentUser._id}`)}

@@ -13,6 +13,7 @@ import Channel from "./pages/Channel";
 import Library from "./pages/Library";
 import LikedVideos from "./pages/LikedVideos";
 import Panel from "./pages/Panel";
+import Playlists from "./pages/Playlists";
 
 const Container = styled.div`
   display: flex;
@@ -48,6 +49,9 @@ function App() {
                   <Route path="subscriptions" element={<Home type="sub" />} />
                   <Route path="users/library">
                     <Route path=":id" element={<Library />} />
+                  </Route>
+                  <Route path="users/playlists">
+                    <Route path=":id" element={<Playlists />} />
                   </Route>
                   <Route path="users/likedvideos">
                     <Route path=":id" element={<LikedVideos />} />
