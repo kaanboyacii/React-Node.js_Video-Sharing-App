@@ -120,8 +120,24 @@ const Title = styled.h2`
 const Menu = ({ darkMode, setDarkMode }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [subscribedUsers, setSubscribedUsers] = useState([]);
-
+  const [playlists, setPlaylists] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchPlaylists = async () => {
+      try {
+        const res = await axios.get("/playlists");
+        const filteredPlaylists = res.data.filter(
+          (playlist) => playlist.userId === currentUser._id
+        );
+        setPlaylists(filteredPlaylists);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchPlaylists();
+  }, [currentUser._id]);
 
   useEffect(() => {
     const fetchSubscribedUsers = async () => {
@@ -189,16 +205,32 @@ const Menu = ({ darkMode, setDarkMode }) => {
             ))}
           </>
         )}
+        {currentUser && (
+          <>
+            <Hr />
+            <Title>Playlists</Title>
+            {playlists.map((playlist) => (
+              <Item
+                style={{ cursor: "pointer", marginBottom: "10px" }}
+                key={playlist._id}
+                onClick={() =>
+                  navigate(`/playlist/${playlist._id}`, {
+                    state: { userId: currentUser._id },
+                  })
+                }
+              >
+                <PlaylistPlayIcon />
+                {playlist.title}
+              </Item>
+            ))}
+          </>
+        )}
         <Hr />
         {currentUser && (
           <>
             <Item onClick={() => navigate(`/users/library/${currentUser._id}`)}>
               <VideoLibraryOutlinedIcon />
               Library
-            </Item>
-            <Item onClick={() => navigate(`/users/playlists/${currentUser._id}`)}>
-              <PlaylistPlayIcon />
-              Playlists
             </Item>
             <Item
               onClick={() => navigate(`/users/likedvideos/${currentUser._id}`)}

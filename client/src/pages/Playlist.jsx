@@ -12,27 +12,30 @@ const Container = styled.div`
 `;
 
 const Playlists = () => {
+    const { currentUser } = useSelector((state) => state.user);
   const [videos, setVideos] = useState([]);
-  const { currentUser } = useSelector((state) => state.user);
+  const [playlists, setPlaylists] = useState([]);
+
 
   useEffect(() => {
-    const fetchVideos = async () => {
-      if (currentUser && currentUser._id) {
-        // check that currentUser and currentUser._id exist
-        try {
-          const res = await axios.get(`/users/library/${currentUser._id}`);
-          setVideos(res.data);
-        } catch (err) {
-          console.error(err);
-        }
+    const fetchPlaylists = async () => {
+      try {
+        const res = await axios.get("/playlists");
+        const filteredPlaylists = res.data.filter(
+          (playlist) => playlist.userId === currentUser._id
+        );
+        setPlaylists(filteredPlaylists);
+      } catch (err) {
+        console.error(err);
       }
     };
-    fetchVideos();
-  }, [currentUser]);
+
+    fetchPlaylists();
+  }, [currentUser._id]);
 
   return (
     <Container>
-      {videos.map((video) => (
+      {playlists.map((video) => (
         <Card key={video._id} video={video} />
       ))}
     </Container>
