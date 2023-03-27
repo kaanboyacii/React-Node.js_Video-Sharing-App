@@ -12,6 +12,15 @@ export const getAllPlaylists = async (req, res, next) => {
   }
 };
 
+export const getAPlaylist = async (req, res, next) => {
+  try {
+    const playlist = await Playlist.findById(req.params.id);
+    res.status(200).json(playlist);
+} catch (err) {
+    next(err)
+}
+};
+
 export const addPlaylist = async (req, res, next) => {
     const newPlaylist = new Playlist({ ...req.body, userId: req.user.id });
     try {
