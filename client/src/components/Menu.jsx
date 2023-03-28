@@ -124,6 +124,11 @@ const Menu = ({ darkMode, setDarkMode }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!currentUser) {
+      console.error("Current user is null.");
+      return;
+    }
+  
     const fetchPlaylists = async () => {
       try {
         const res = await axios.get("/playlists");
@@ -135,11 +140,15 @@ const Menu = ({ darkMode, setDarkMode }) => {
         console.error(err);
       }
     };
-
+  
     fetchPlaylists();
-  }, [currentUser._id]);
+  }, [currentUser]);
 
   useEffect(() => {
+    if (!currentUser) {
+      console.error("Current user is null.");
+      return;
+    }
     const fetchSubscribedUsers = async () => {
       try {
         const subscribedUserIds = currentUser.subscribedUsers;
