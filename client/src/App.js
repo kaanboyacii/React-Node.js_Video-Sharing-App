@@ -50,7 +50,7 @@ function App() {
                   <Route path="users/library">
                     <Route path=":id" element={<Library />} />
                   </Route>
-                  <Route path="users/playlist">
+                  <Route path="/playlist">
                     <Route path=":id" element={<Playlist />} />
                   </Route>
                   <Route path="users/likedvideos">

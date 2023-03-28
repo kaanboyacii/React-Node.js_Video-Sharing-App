@@ -224,7 +224,7 @@ const Menu = ({ darkMode, setDarkMode }) => {
                 key={playlist._id}
                 onClick={() =>
                   navigate(`/playlist/${playlist._id}`, {
-                    state: { userId: currentUser._id },
+                    state: { playlistId: playlist._id },
                   })
                 }
               >
