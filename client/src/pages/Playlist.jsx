@@ -26,9 +26,8 @@ const Playlist = () => {
           return;
         }
         const res = await axios.get(`/playlists/${playlistId}`);
-        const playlistVideos = res.data.videos || [];
-        const videoIds = playlistVideos.map((video) => video._id).filter((id) => id);
-        console.log(videoIds);
+        const playlistVideos = res.data.videos;
+        const videoIds = playlistVideos.filter((id) => id);
         const promises = videoIds.map((videoId) =>
           axios.get(`/videos/find/${videoId}`)
         );
@@ -41,16 +40,18 @@ const Playlist = () => {
     };
     fetchVideos();
   }, [playlistId]);
-  
+
   return (
     <div>
       <h2>My Playlist</h2>
       <h3>Videos</h3>
       <ul>
-        {videos.map((video) => {
-          console.log(video);
-          return <li key={video._id}>{video.title}</li>;
-        })}
+        {videos.map((video) => (
+          <div key={video._id}>
+            <h2>{video.title}</h2>
+            <p>{video.description}</p>
+          </div>
+        ))}
       </ul>
     </div>
   );
