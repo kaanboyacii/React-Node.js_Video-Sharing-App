@@ -21,27 +21,36 @@ const Playlist = () => {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
+        if (!playlistId) {
+          console.error("playlistId is undefined or null");
+          return;
+        }
         const res = await axios.get(`/playlists/${playlistId}`);
-        setVideos(res.data.videos);
+        const playlistVideos = res.data.videos || [];
+        const videoIds = playlistVideos.map((video) => video._id).filter((id) => id);
+        console.log(videoIds);
+        const promises = videoIds.map((videoId) =>
+          axios.get(`/videos/find/${videoId}`)
+        );
+        const videoData = await Promise.all(promises);
+        const videos = videoData.map((res) => res.data);
+        setVideos(videos);
       } catch (err) {
         console.error(err);
       }
     };
-    if (playlistId) {
-      fetchVideos(playlistId);
-    } else {
-      console.error("playlistId is undefined or null");
-    }
+    fetchVideos();
   }, [playlistId]);
-
+  
   return (
     <div>
       <h2>My Playlist</h2>
       <h3>Videos</h3>
       <ul>
-        {videos.map((video) => (
-          <li key={video._id}>{video.title}</li>
-        ))}
+        {videos.map((video) => {
+          console.log(video);
+          return <li key={video._id}>{video.title}</li>;
+        })}
       </ul>
     </div>
   );
