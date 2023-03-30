@@ -12,6 +12,25 @@ const Container = styled.div`
   flex-wrap: wrap;
 `;
 
+const TitleContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+`;
+
+const Title = styled.h2`
+  font-size: 32px;
+  margin-bottom: 10px;
+  color: ${({ theme }) => theme.text};
+`;
+
+const SubTitle = styled.h3`
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: ${({ theme }) => theme.text};
+`;
+
 const Playlist = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [videos, setVideos] = useState([]);
@@ -42,18 +61,17 @@ const Playlist = () => {
   }, [playlistId]);
 
   return (
-    <div>
-      <h2>My Playlist</h2>
-      <h3>Videos</h3>
-      <ul>
+    <>
+      <TitleContainer>
+        <Title>My Playlist</Title>
+        <SubTitle>Videos</SubTitle>
+      </TitleContainer>
+      <Container>
         {videos.map((video) => (
-          <div key={video._id}>
-            <h2>{video.title}</h2>
-            <p>{video.description}</p>
-          </div>
+          <Card key={video._id} video={video} />
         ))}
-      </ul>
-    </div>
+      </Container>
+    </>
   );
 };
 
