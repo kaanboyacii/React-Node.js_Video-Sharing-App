@@ -35,6 +35,7 @@ const Playlist = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [videos, setVideos] = useState([]);
   const location = useLocation();
+  const [playlistTitle, setPlaylistTitle] = useState("");
   const playlistId = location.state?.playlistId;
 
   useEffect(() => {
@@ -45,6 +46,7 @@ const Playlist = () => {
           return;
         }
         const res = await axios.get(`/playlists/${playlistId}`);
+        setPlaylistTitle(res.data.title);
         const playlistVideos = res.data.videos;
         const videoIds = playlistVideos.filter((id) => id);
         const promises = videoIds.map((videoId) =>
@@ -63,7 +65,7 @@ const Playlist = () => {
   return (
     <>
       <TitleContainer>
-        <Title>My Playlist</Title>
+        <Title>{playlistTitle}</Title>
         <SubTitle>Videos</SubTitle>
       </TitleContainer>
       <Container>
