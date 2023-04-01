@@ -1,6 +1,8 @@
 ﻿# Video Sharing Web App
  Project Preview: https://www.youtube.com/watch?v=qgEBcuOgj48
+ 
  Gallery:
+ 
  ![Screenshot 2023-04-01 at 11-44-55 UyuTube](https://user-images.githubusercontent.com/98668706/229276139-b06d5a76-f9a1-465a-ac34-056d713871f0.png)
 ![Screenshot 2023-04-01 at 11-46-20 UyuTube](https://user-images.githubusercontent.com/98668706/229276142-5556876b-9306-43ba-a170-7391a2f8ab22.png)
 ![Screenshot 2023-04-01 at 11-46-05 UyuTube](https://user-images.githubusercontent.com/98668706/229276146-34660ec0-bbdf-49e1-85fb-286bba50e596.png)
