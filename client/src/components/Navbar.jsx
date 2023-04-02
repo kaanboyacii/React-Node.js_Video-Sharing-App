@@ -186,7 +186,7 @@ const Navbar = () => {
         </Wrapper>
       </Container>
       {open && <Upload setOpen={setOpen} />}
-      {openNotifications && <Notifications setOpen={setOpenNotifications} />}
+      {openNotifications && <Notifications setOpenNotifications={setOpenNotifications} />}
     </>
   );
 };
