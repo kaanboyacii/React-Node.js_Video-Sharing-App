@@ -3,9 +3,11 @@ import styled from "styled-components";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import VideoCallOutlinedIcon from "@mui/icons-material/VideoCallOutlined";
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Upload from "./Upload";
+import Notifications from "./Notifications";
 import { logout } from "../redux/userSlice.js";
 import { useDispatch } from "react-redux";
 import axios from "axios";
@@ -98,6 +100,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
+  const [openNotifications, setOpenNotifications] = useState(false);
   const [q, setQ] = useState("");
   const { currentUser } = useSelector((state) => state.user);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -137,6 +140,10 @@ const Navbar = () => {
               <VideoCallOutlinedIcon
                 style={{ cursor: "pointer", fontSize: "35px" }}
                 onClick={() => setOpen(true)}
+              />
+              <NotificationsNoneIcon
+                style={{ cursor: "pointer", fontSize: "35px" }}
+                onClick={() => setOpenNotifications(true)}
               />
               <UserAvatar onClick={handleUserClick}>
                 <Avatar src={currentUser.img} />
@@ -179,6 +186,7 @@ const Navbar = () => {
         </Wrapper>
       </Container>
       {open && <Upload setOpen={setOpen} />}
+      {openNotifications && <Notifications setOpen={setOpenNotifications} />}
     </>
   );
 };
