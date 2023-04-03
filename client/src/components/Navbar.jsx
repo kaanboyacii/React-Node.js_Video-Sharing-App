@@ -102,6 +102,34 @@ const NotificationsMenu = styled.div`
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  z-index: 999;
+
+  h3 {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 200px;
+    overflow: auto;
+  }
+
+  li {
+    margin-bottom: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    color: #f00;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      color: #333;
+      text-decoration: underline;
+    }
+  }
 `;
 
 const Navbar = () => {
@@ -117,24 +145,28 @@ const Navbar = () => {
 
   useEffect(() => {
     const fetchVideosAndComments = async () => {
-      const responseVideos = await axios.get("/videos");
-      setVideos(responseVideos.data);
-  
-      const userId = currentUser ? currentUser._id : null;
-      const userVideos = videos.filter((video) => video.userId === userId);
-      const videoIds = userVideos.map((video) => video._id);
-      const commentPromises = videoIds.map((videoId) => axios.get(`/comments/${videoId}`));
-      const responseComments = await Promise.all(commentPromises);
-      console.log(responseComments)
-      const filteredComments = responseComments.map(response => response.data).flat().filter((comment) =>
-      videoIds.includes(comment.videoId)
-      );
-      setComments(filteredComments);
+      try {
+        const responseVideos = await axios.get("/videos");
+        setVideos(responseVideos.data);
+        const userId = currentUser ? currentUser._id : null;
+        const userVideos = videos.filter((video) => video.userId === userId);
+        const videoIds = userVideos.map((video) => video._id);
+        const commentPromises = videoIds.map((videoId) =>
+          axios.get(`/comments/${videoId}`)
+        );
+        const responseComments = await Promise.all(commentPromises);
+        const filteredComments = responseComments
+          .map((response) => response.data)
+          .flat()
+          .filter((comment) => videoIds.includes(comment.videoId));
+        setComments(filteredComments);
+      } catch (err) {
+        console.error(err);
+      }
     };
-  
     fetchVideosAndComments();
   }, [videos, currentUser]);
-  
+
   const handleUserClick = () => {
     setMenuOpen(!menuOpen);
     setNotificationsOpen(false); // bildirimleri kapat
@@ -190,12 +222,16 @@ const Navbar = () => {
                   <h3>New comments:</h3>
                   <ul>
                     {comments.map((comment) => (
-                      <li key={comment.id}>{comment.text}</li>
+                      <li
+                        key={comment._id}
+                        onClick={() => navigate(`/video/${comment.videoId}`)}
+                      >
+                        {comment.desc}
+                      </li>
                     ))}
                   </ul>
                 </NotificationsMenu>
               )}
-
               {menuOpen && (
                 <UserMenu>
                   <Button
